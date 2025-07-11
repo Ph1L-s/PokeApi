@@ -19,33 +19,52 @@ function extractIdFromUrl(url) {
 }
 //--------------------------------------------------------------------------------------> get single pokemon
 async function getPokemon(pokemonId) {
+    try{
     let response = await fetch(POKEAPI_URL + `pokemon/${pokemonId}`);
     let pokemon = await response.json();
     console.log("loaded pokemon:", pokemon.name);
     return pokemon;
+    } catch (error) {
+        console.error("get Pokemon asyn didn't not response:" + error)
+
+    }
+    
 }
 //--------------------------------------------------------------------------------------> get Pokemon list
 async function getPokemonList(limit = 20, offset = 0) {
-    let response = await fetch(POKEAPI_URL + `pokemon?limit=${limit}&offset=${offset}`);
-    let listData = await response.json();
-    console.log("loaded pokemon list:", listData.results.length);
-    return listData;
+
+    try{
+        let response = await fetch(POKEAPI_URL + `pokemon?limit=${limit}&offset=${offset}`);
+        let listData = await response.json();
+        console.log("loaded pokemon list:", listData.results.length);
+        return listData;
+    } catch (error){
+        console.error("getPokemonList:" + error )
+    }
+    
 }
 
 
 //--------------------------------------------------------------------------------------> get multiple pokemon
 async function getMultiplePokemon(pokemonIds) {
-    console.log("loading multiple pokemon:", pokemonIds.length);
-    let validPokemon = [];
-    for (let pokemonFetchIndex = 0; pokemonFetchIndex < pokemonIds.length; pokemonFetchIndex++) {
-        let pokemon = await getPokemon(pokemonIds[pokemonFetchIndex]);
-        if (pokemon) {
-            validPokemon.push(pokemon);
+    try{
+
+        console.log("loading multiple pokemon:", pokemonIds.length);
+        let validPokemon = [];
+        for (let pokemonFetchIndex = 0; pokemonFetchIndex < pokemonIds.length; pokemonFetchIndex++) {
+            let pokemon = await getPokemon(pokemonIds[pokemonFetchIndex]);
+            if (pokemon) {
+                validPokemon.push(pokemon);
+            }
+            console.log("loaded pokemon single:", pokemonFetchIndex, pokemon.name);
         }
-        console.log("loaded pokemon single:", pokemonFetchIndex, pokemon.name);
+
+        console.log("multiple pokemon done:", validPokemon.length);
+        return validPokemon;
+            
+    } catch (error) {
+        console.error("getMultiplePokemon:" + error)
     }
-    console.log("multiple pokemon done:", validPokemon.length);
-    return validPokemon;
 }
 
 //--------------------------------------------------------------------------------------> get pokemon sprites
@@ -62,20 +81,31 @@ function getPokemonSprites(pokemonId) {
 
 //--------------------------------------------------------------------------------------> get pokemon types
 async function getPokemonTypes() {
-    let response = await fetch(POKEAPI_URL + "type");
-    let typesData = await response.json();
-    console.log("types loaded:", typesData.results.length);
-    return typesData.results;
+    try {
+        let response = await fetch(POKEAPI_URL + "type");
+        let typesData = await response.json();
+
+        console.log("types loaded:", typesData.results.length);
+
+        return typesData.results;
+    } catch(error) {
+        console.error("getPokemonTypes:" + error);
+    }
 }
 //--------------------------------------------------------------------------------------> search pokemon
 async function searchPokemon(searchTerm) {
-    console.log("searching pokemon:", searchTerm);
-    let pokemon = await getPokemon(searchTerm.toLowerCase());
-    if (pokemon) {
-        console.log("pokemon found:", pokemon.name);
-        return pokemon;
-    } else {
-        console.log("pokemon not found:", searchTerm);
-        return null;
+    try {
+        console.log("searching pokemon:", searchTerm);
+        let pokemon = await getPokemon(searchTerm.toLowerCase());
+        if (pokemon) {
+            console.log("pokemon found:", pokemon.name);
+            return pokemon;
+        } else {
+            console.log("pokemon not found:", searchTerm);
+            return null;
+        }
+    } catch (error){
+        console.error("pokemon not found:", searchTerm);
+    
     }
 }

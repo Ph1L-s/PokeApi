@@ -1,7 +1,7 @@
-//--------------------------------------------------------------------------------------> Template.js
+//--------------------------------------------------------------------------------------> Templates-HTML.js
 
-//--------------------------------------------------------------------------------------> generation Buttontemplate
-function getGenerationTemplate(generationId) {
+//--------------------------------------------------------------------------------------> generation Button HTML
+function getGenerationButtonHTML(generationId) {
     return `
         <button class="generation_button" onclick="loadGeneration(${generationId})">
             Generation ${generationId}
@@ -9,19 +9,13 @@ function getGenerationTemplate(generationId) {
     `;
 }
 
-//--------------------------------------------------------------------------------------> no Pokemon template
-function getNoPokemonTemplate() {
+//--------------------------------------------------------------------------------------> no Pokemon HTML
+function getNoPokemonHTML() {
     return '<div class="no_pokemon">No pokemon loaded</div>';
 }
 
-//--------------------------------------------------------------------------------------> pokemon cardtemplate
-function getPokemonCardTemplate(pokemon) {
-    let sprites = getPokemonSprites(pokemon.id);
-    let types = [];
-    for (let typeIndex = 0; typeIndex < pokemon.types.length; typeIndex++) {
-        types.push(pokemon.types[typeIndex].type.name);
-    }
-    let typeString = types.join(', ');
+//--------------------------------------------------------------------------------------> pokemon card HTML
+function getPokemonCardHTML(pokemon, sprites, typeString) {
     return `
         <div class="pokemon_card_mini" onclick="showPokemonDetails(${pokemon.id})">
             <div class="pokemon_image_mini">
@@ -39,11 +33,8 @@ function getPokemonCardTemplate(pokemon) {
     `;
 }
 
-//--------------------------------------------------------------------------------------> lmiter controls template
-function getLimiterTemplate(currentPage, totalPages, totalPokemon) {
-    let startPokemon = (currentPage - 1) * 30 + 1;
-    let endPokemon = Math.min(currentPage * 30, totalPokemon);
-    
+//--------------------------------------------------------------------------------------> limiter controls HTML
+function getLimiterHTML(currentPage, totalPages, startPokemon, endPokemon, totalPokemon) {
     return `
         <div class="Limiter_container">
             <div class="Limiter_info">
@@ -62,14 +53,16 @@ function getLimiterTemplate(currentPage, totalPages, totalPokemon) {
                         Next →
                     </button>
                 </div>
-            </div>`
-    ;
-}  //--------------------------------------------------------------------------------------> Evolution chaintemplate  
-function getEvolutionChainTemplate(evolutionChain) {
-    if (!evolutionChain || evolutionChain.length <= 1) {
-        return '<div class="evolution_chain"><p class="no_evolution">No evolutions available</p></div>';
-    }
-    
+            </div>`;
+}
+
+//--------------------------------------------------------------------------------------> no evolution HTML
+function getNoEvolutionHTML() {
+    return '<div class="evolution_chain"><p class="no_evolution">No evolutions available</p></div>';
+}
+
+//--------------------------------------------------------------------------------------> Evolution chain HTML
+function getEvolutionChainHTML(evolutionChain) {
     let evolutionHTML = '<div class="evolution_chain">';
     for (let evolutionChainIndex = 0; evolutionChainIndex < evolutionChain.length; evolutionChainIndex++) {
         const evo = evolutionChain[evolutionChainIndex];
@@ -82,8 +75,7 @@ function getEvolutionChainTemplate(evolutionChain) {
                      class="evolution_sprite"
                      onerror="this.src='${sprites.artwork}'">
                 <p class="evolution_name">${evo.name}</p>
-            </div>`
-        ;
+            </div>`;
         if (evolutionChainIndex < evolutionChain.length - 1) {
             evolutionHTML += '<div class="evolution_arrow">→</div>';
         }
@@ -92,24 +84,8 @@ function getEvolutionChainTemplate(evolutionChain) {
     return evolutionHTML;
 }
 
-//--------------------------------------------------------------------------------------> Pokemon stats template
-function getPokemonStatsTemplate(pokemon) {
-    let sprites = getPokemonSprites(pokemon.id);
-    let types = [];
-    let abilities = [];
-    
-    for (let typeIndex = 0; typeIndex < pokemon.types.length; typeIndex++) {
-        types.push(pokemon.types[typeIndex].type.name);
-    }
-    for (let abilityIndex = 0; abilityIndex < pokemon.abilities.length; abilityIndex++) {
-        abilities.push(pokemon.abilities[abilityIndex].ability.name);
-    }
-    let typeString = types.join(', ');
-    let abilityString = abilities.join(', ');
-    let pokemonHeight = pokemon.height / 10;
-    let pokemonWeight = pokemon.weight / 10;
-    const evolutionChain = parseEvolutionChain(pokemon.evolution_chain);
-    
+//--------------------------------------------------------------------------------------> Pokemon stats HTML
+function getPokemonStatsHTML(pokemon, sprites, typeString, abilityString, pokemonHeight, pokemonWeight, evolutionChain) {
     return `
         <div class="stats_overlay" onclick="closeStats()">
             <div class="stats_content" onclick="event.stopPropagation()">
@@ -145,25 +121,8 @@ function getPokemonStatsTemplate(pokemon) {
     `;
 }
 
-//--------------------------------------------------------------------------------------> Base stats template
-function getStatsTemplate(stats) {
-    let statsHTML = '';
-    
-    for (let statIndex = 0; statIndex < stats.length; statIndex++) {
-        let stat = stats[statIndex];
-        let statName = stat.stat.name;
-        let statValue = stat.base_stat;
-        
-        // Calculate percentage for stat bar (max 255 for pokemon stats thanks gpt :d )
-        let percentage = Math.min((statValue / 255) * 100, 100);
-        statsHTML += getStatTemplate(statName, statValue, percentage);
-    }
-    
-    return statsHTML;
-}
-
-//--------------------------------------------------------------------------------------> stat row template
-function getStatTemplate(statName, statValue, percentage) {
+//--------------------------------------------------------------------------------------> stat row HTML
+function getStatRowHTML(statName, statValue, percentage) {
     return `
         <div class="stat_row">
             <span class="stat_name">${statName}</span>
@@ -175,11 +134,12 @@ function getStatTemplate(statName, statValue, percentage) {
     `;
 }
 
-//--------------------------------------------------------------------------------------> loading template
-function getLoadingTemplate(message) {
+//--------------------------------------------------------------------------------------> loading HTML
+function getLoadingHTML(message) {
     return `<div class="loading_message">${message}</div>`;
 }
-//--------------------------------------------------------------------------------------> error template
-function getErrorTemplate(message) {
+
+//--------------------------------------------------------------------------------------> error HTML
+function getErrorHTML(message) {
     return `<div class="error_message">${message}</div>`;
 }

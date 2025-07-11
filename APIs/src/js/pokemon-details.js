@@ -1,32 +1,61 @@
 //--------------------------------------------------------------------------------------> pokemon-details.js
 
-//--------------------------------------------------------------------------------------> parse evolution chain data
+//--------------------------------------------------------------------------------------> parse evolution chain data - Anfängerfreundlich
 function parseEvolutionChain(evolutionChain) {
+    
     if (!evolutionChain || !evolutionChain.chain) {
         return [];
     }
+    
     let evolutions = [];
     let current = evolutionChain.chain;
-    evolutions.push({
+    let firstPokemon = {
         name: current.species.name,
         id: extractIdFromUrl(current.species.url)
-    });
-    while (current.evolves_to && current.evolves_to.length > 0) {
+    };
+    evolutions.push(firstPokemon);
+    
+    if (current.evolves_to && current.evolves_to.length > 0) {
         current = current.evolves_to[0];
-        evolutions.push({
+        let firstEvolution = {
             name: current.species.name,
             id: extractIdFromUrl(current.species.url)
-        });
+        };
+        evolutions.push(firstEvolution);
+        if (current.evolves_to && current.evolves_to.length > 0) {
+            current = current.evolves_to[0];
+            let secondEvolution = {
+                name: current.species.name,
+                id: extractIdFromUrl(current.species.url)
+            };
+            evolutions.push(secondEvolution);
+            console.log("Added second evolution:", secondEvolution.name, "with ID:", secondEvolution.id);
+            
+            if (current.evolves_to && current.evolves_to.length > 0) {
+                current = current.evolves_to[0];
+                console.log("Found third evolution:", current.species.name);
+                let thirdEvolution = {
+                    name: current.species.name,
+                    id: extractIdFromUrl(current.species.url)
+                };
+                evolutions.push(thirdEvolution);
+            }
+        }
     }
-    console.log("evolution chain parsed:", evolutions.map(e => e.name).join(' → '));
+    let evolutionNames = [];
+    for (let evolutionIndex = 0; evolutionIndex < evolutions.length; evolutionIndex++) {
+        evolutionNames.push(evolutions[evolutionIndex].name);
+    }
+    let evolutionString = evolutionNames.join(' → ');
+    console.log("evolution chain parsed:", evolutionString);
+    console.log("Final evolution array:", evolutions);
     return evolutions;
 }
     //--------------------------------------------------------------------------------------> get pokemon with details
 async function getPokemonWithDetails(pokemonId) {
     console.log("loading pokemon details:", pokemonId);
     let pokemon = await getPokemon(pokemonId);
-    if (!pokemon) return null;
-    let response = await fetch(POKEAPI_URL + `pokemon-species/${pokemonId}`);
+
     let speciesData = await response.json();
     console.log("loaded species data:", speciesData.name);
     let evolutionChain = null;

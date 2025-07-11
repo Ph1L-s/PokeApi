@@ -1,0 +1,112 @@
+/* assets.css */
+.loading_spinner {
+    width: 50px;
+    height: 50px;
+    background-image: url('../../../resources/images/pokeball_gray.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin: 0 auto 15px auto;
+    opacity: 0.8;
+    filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
+    animation: simple_spin 1.5s linear infinite;
+}
+/* spin animation via keyframe */
+@keyframes simple_spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Loading Overlay */
+.loading_overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    border-radius: 10px;
+    backdrop-filter: blur(2px);
+}
+
+.loading_text {
+    font-size: 16px;
+    color: #666666;
+    font-weight: 500;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.pokemon_container_loading .loading_spinner {
+    width: 60px;
+    height: 60px;
+}
+
+.sidebar_loading .loading_spinner {
+    width: 40px;
+    height: 40px;
+}
+
+.stats_loading .loading_spinner {
+    width: 45px;
+    height: 45px;
+}
+
+
+/* /* Type-specific Colors  todo to use them for the "element types" */
+.type_normal { background-color: #a8a878; color: #ffffff; }
+.type_fire { background-color: #f08030; color: #ffffff; }
+.type_water { background-color: #6890f0; color: #ffffff; }
+.type_electric { background-color: #f8d030; color: #333333; }
+.type_grass { background-color: #78c850; color: #ffffff; }
+.type_ice { background-color: #98d8d8; color: #333333; }
+.type_fighting { background-color: #c03028; color: #ffffff; }
+.type_poison { background-color: #a040a0; color: #ffffff; }
+.type_ground { background-color: #e0c068; color: #333333; }
+.type_flying { background-color: #a890f0; color: #ffffff; }
+.type_psychic { background-color: #f85888; color: #ffffff; }
+.type_bug { background-color: #a8b820; color: #ffffff; }
+.type_rock { background-color: #b8a038; color: #ffffff; }
+.type_ghost { background-color: #705898; color: #ffffff; }
+.type_dragon { background-color: #7038f8; color: #ffffff; }
+.type_dark { background-color: #705848; color: #ffffff; }
+.type_steel { background-color: #b8b8d0; color: #333333; }
+.type_fairy { background-color: #ee99ac; color: #333333; }
+
+/* Hover Effects for Type Buttons */
+.type_normal:hover { background-color: #9a9a68; }
+.type_fire:hover { background-color: #e07020; }
+.type_water:hover { background-color: #5880e0; }
+.type_electric:hover { background-color: #e8c020; }
+.type_grass:hover { background-color: #68b840; }
+.type_ice:hover { background-color: #88c8c8; }
+.type_fighting:hover { background-color: #b02018; }
+.type_poison:hover { background-color: #903090; }
+.type_ground:hover { background-color: #d0b058; }
+.type_flying:hover { background-color: #9880e0; }
+.type_psychic:hover { background-color: #e84878; }
+.type_bug:hover { background-color: #98a810; }
+.type_rock:hover { background-color: #a89028; }
+.type_ghost:hover { background-color: #604888; }
+.type_dragon:hover { background-color: #6028e8; }
+.type_dark:hover { background-color: #604838; }
+.type_steel:hover { background-color: #a8a8c0; }
+.type_fairy:hover { background-color: #de899c; }
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,145 @@
+/* Sidebar Scrollbar Styling - Cross-Browser Alternative */
+.sidebar {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e0e0e0;
+    position: sticky;
+    top: 120px;
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+    z-index: 100;
+    align-self: flex-start;
+    
+    /* Standard Scrollbar Properties */
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #dc143c #f1f1f1; /* Firefox: thumb track */
+    
+    /* Webkit Fallback für Browser die es unterstützen */
+    scrollbar-width: 6px;
+}
+
+/* Webkit Support für Browser die es haben */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #dc143c;
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #b8112e;
+}
+
+/* Alternative für Browser ohne Scrollbar-Styling Support */
+@supports not (scrollbar-width: thin) {
+    .sidebar {
+        /* Füge rechts eine subtile Border hinzu als visueller Hinweis */
+        border-right: 2px solid #dc143c;
+        padding-right: 18px; /* Kompensiere die Border */
+    }
+    
+    /* Optional: Füge Scroll-Indikatoren hinzu */
+    .sidebar::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 2px;
+        height: 20px;
+        background: linear-gradient(to bottom, #dc143c, transparent);
+        opacity: 0.5;
+        pointer-events: none;
+    }
+    
+    .sidebar::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 2px;
+        height: 20px;
+        background: linear-gradient(to top, #dc143c, transparent);
+        opacity: 0.5;
+        pointer-events: none;
+    }
+}
+
+/* Generation Sections */
+.generation_section {
+    margin-bottom: 30px;
+}
+
+.generation_section:last-child {
+    margin-bottom: 0;
+}
+
+.generation_section h3 {
+    margin-bottom: 15px;
+    color: #dc143c;
+    border-bottom: 2px solid #ffcb05;
+    padding-bottom: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Generation List Container */
+.generations_list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Generation Buttons */
+.generation_button {
+    padding: 12px 20px;
+    background-color: #f8f8f8;
+    border: 2px solid #dddddd;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    font-weight: 600;
+    font-size: 16px;
+    color: #333333;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    width: 100%;
+    text-align: center;
+}
+
+.generation_button:hover {
+    background-color: #ffcb05;
+    border-color: #dc143c;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.generation_button:active {
+    background-color: #e6b800;
+    border-color: #dc143c;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+.generation_button.active {
+    background-color: #dc143c;
+    color: #ffffff;
+    border-color: #dc143c;
+    box-shadow: 0 2px 8px rgba(220, 20, 60, 0.3);
+}
+
+/* Generation Button Spacing */
+.generations_list .generation_button {
+    margin-bottom: 2px;
+}
+
+.generations_list .generation_button:last-child {
+    margin-bottom: 0;
+}

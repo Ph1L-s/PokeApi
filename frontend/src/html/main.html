@@ -5,31 +5,77 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PokéDex</title>
     
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/assets.css"> 
+        <link rel="icon" type="image/png" href="../../../resources/icons/pokeball.png">
+
+    <!-- CSS-files -->
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/header.css">
     <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/footer.css">
     <link rel="stylesheet" href="../css/cards.css">
     <link rel="stylesheet" href="../css/mini-cards.css">
-    <link rel="stylesheet" href="../css/header.css">
-    <link rel="stylesheet" href="../css/main.css">
-    <link rel="stylesheet" href="../css/responsive.css">
     <link rel="stylesheet" href="../css/evolution.css">
+    <link rel="stylesheet" href="../css/assets.css">
+    <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/responsive.css">
 
-    <script src="../../../APIs/src/js/pokemon-data.js"></script>
-    <script src="../../../frontend/src/js/loader.js"></script>
-    <script src="../../../frontend/src/js/script.js"></script>
-    <script src="../../../frontend/src/js/template.js"></script>
-    <script src="../../../frontend/src/js/render.js"></script>
+    <!-- API Scripts -->
+    <script src="../../../APIs/src/js/pokemon-api-base.js"></script>
+    <script src="../../../APIs/src/js/pokemon-generations.js"></script>
+    <script src="../../../APIs/src/js/pokemon-details.js"></script>
+    <script src="../../../APIs/src/js/pokemon-init.js"></script>
+    
+    <!-- app Scripts -->
+    <script src="../../src/js/script.js"></script>
+    <script src="../../src/js/render.js"></script>
+    <script src="../../src/js/loader.js"></script>
+    <script src="../../src/js/template.js"></script>
 </head>
 <body onload="init()">
     
     <header class="header">
-        <div class="header-content">
-            <h1 class="header-title">PokéDex</h1>
+        <div class="header_content">
+            <h1 class="header_title">PokéDex</h1>
         </div>
     </header>
 
-    
+    <main class="main_content">
+        <!-- Sidebar with Generation Navigation -->
+        <aside class="sidebar">
+            <div class="generation_section">
+                <h3>Generations</h3>
+                <div id="generations_container" class="generations_list">
+                    <!-- Generation buttons will be rendered here -->
+                </div>
+            </div>
+        </aside>
+
+        <section class="content_area">
+            <div class="content_header">
+                <h2>Pokemon</h2>
+                <div class="view_controls">
+                    <!-- <span class="pokemon_count" id="pokemon_count">Loading...</span> --> <!-- TODO need fixed  -->
+                </div>
+            </div>
+            
+            <div id="pokemon_container" class="pokemon_grid">
+                <div class="loading_message">Loading PokéDex...</div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer_content">
+            <p>&copy; 2025 PokéDex - Powered by PokéAPI <br>
+            Developed by Phil</p>
+        </div>
+    </footer>
+
+    <!-- Stats Container for Pokemon Details -->
+    <div id="pokemon_stats" class="stats_container" style="display: none;">
+        <!-- Stats content will be generated dynamically -->
+    </div>
 
 </body>
 </html>

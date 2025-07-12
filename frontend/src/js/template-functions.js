@@ -1,4 +1,43 @@
-//--------------------------------------------------------------------------------------> Template-Functions.js
+//--------------------------------------------------------------------------------------> Template.js
+
+//--------------------------------------------------------------------------------------> pokemon cardtemplate 
+function getPokemonCardTemplate(pokemon) {
+    let sprites = getPokemonSprites(pokemon.id);
+    let typeBadges = [];
+    
+    for (let typeIndex = 0; typeIndex < pokemon.types.length; typeIndex++) {
+        let typeName = pokemon.types[typeIndex].type.name;
+        typeBadges.push(getTypeBadgeHTML(typeName));  
+    }
+    
+    let typeBadgesHTML = typeBadges.join(' ');
+    
+    return getPokemonCardHTML(pokemon, sprites, typeBadgesHTML);
+}
+
+//--------------------------------------------------------------------------------------> Pokemon stats template 
+function getPokemonStatsTemplate(pokemon) {
+    let sprites = getPokemonSprites(pokemon.id);
+    let typeBadges = [];
+    let abilities = [];
+    
+    for (let typeIndex = 0; typeIndex < pokemon.types.length; typeIndex++) {
+        let typeName = pokemon.types[typeIndex].type.name;
+        typeBadges.push(getTypeBadgeHTML(typeName)); 
+    }
+    
+    for (let abilityIndex = 0; abilityIndex < pokemon.abilities.length; abilityIndex++) {
+        abilities.push(pokemon.abilities[abilityIndex].ability.name);
+    }
+    
+    let typeBadgesHTML = typeBadges.join(' ');
+    let abilityString = abilities.join(', ');
+    let pokemonHeight = pokemon.height / 10;
+    let pokemonWeight = pokemon.weight / 10;
+    const evolutionChain = parseEvolutionChain(pokemon.evolution_chain);
+    
+    return getPokemonStatsHTML(pokemon, sprites, typeBadgesHTML, abilityString, pokemonHeight, pokemonWeight, evolutionChain);
+}
 
 //--------------------------------------------------------------------------------------> generation Buttontemplate
 function getGenerationTemplate(generationId) {
@@ -8,17 +47,6 @@ function getGenerationTemplate(generationId) {
 //--------------------------------------------------------------------------------------> no Pokemon template
 function getNoPokemonTemplate() {
     return getNoPokemonHTML();
-}
-
-//--------------------------------------------------------------------------------------> pokemon cardtemplate
-function getPokemonCardTemplate(pokemon) {
-    let sprites = getPokemonSprites(pokemon.id);
-    let types = [];
-    for (let typeIndex = 0; typeIndex < pokemon.types.length; typeIndex++) {
-        types.push(pokemon.types[typeIndex].type.name);
-    }
-    let typeString = types.join(', ');
-    return getPokemonCardHTML(pokemon, sprites, typeString);
 }
 
 //--------------------------------------------------------------------------------------> lmiter controls template
@@ -36,27 +64,6 @@ function getEvolutionChainTemplate(evolutionChain) {
     }
     
     return getEvolutionChainHTML(evolutionChain);
-}
-
-//--------------------------------------------------------------------------------------> Pokemon stats template
-function getPokemonStatsTemplate(pokemon) {
-    let sprites = getPokemonSprites(pokemon.id);
-    let types = [];
-    let abilities = [];
-    
-    for (let typeIndex = 0; typeIndex < pokemon.types.length; typeIndex++) {
-        types.push(pokemon.types[typeIndex].type.name);
-    }
-    for (let abilityIndex = 0; abilityIndex < pokemon.abilities.length; abilityIndex++) {
-        abilities.push(pokemon.abilities[abilityIndex].ability.name);
-    }
-    let typeString = types.join(', ');
-    let abilityString = abilities.join(', ');
-    let pokemonHeight = pokemon.height / 10;
-    let pokemonWeight = pokemon.weight / 10;
-    const evolutionChain = parseEvolutionChain(pokemon.evolution_chain);
-    
-    return getPokemonStatsHTML(pokemon, sprites, typeString, abilityString, pokemonHeight, pokemonWeight, evolutionChain);
 }
 
 //--------------------------------------------------------------------------------------> Base stats template

@@ -1,4 +1,5 @@
 /* assets.css */
+
 .loading_spinner {
     width: 50px;
     height: 50px;
@@ -9,9 +10,9 @@
     margin: 0 auto 15px auto;
     opacity: 0.8;
     filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.2));
-    animation: simple_spin 1.5s linear infinite;
+    animation: simple_spin 2s linear infinite;
 }
-/* spin animation via keyframe */
+
 @keyframes simple_spin {
     from { transform: rotate(0deg); }
     to { transform: rotate(360deg); }
@@ -57,28 +58,156 @@
     height: 45px;
 }
 
+.type_badge {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 1px 2px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
 
-/* /* Type-specific Colors  todo to use them for the "element types" */
-.type_normal { background-color: #a8a878; color: #ffffff; }
-.type_fire { background-color: #f08030; color: #ffffff; }
-.type_water { background-color: #6890f0; color: #ffffff; }
-.type_electric { background-color: #f8d030; color: #333333; }
-.type_grass { background-color: #78c850; color: #ffffff; }
-.type_ice { background-color: #98d8d8; color: #333333; }
-.type_fighting { background-color: #c03028; color: #ffffff; }
-.type_poison { background-color: #a040a0; color: #ffffff; }
-.type_ground { background-color: #e0c068; color: #333333; }
-.type_flying { background-color: #a890f0; color: #ffffff; }
-.type_psychic { background-color: #f85888; color: #ffffff; }
-.type_bug { background-color: #a8b820; color: #ffffff; }
-.type_rock { background-color: #b8a038; color: #ffffff; }
-.type_ghost { background-color: #705898; color: #ffffff; }
-.type_dragon { background-color: #7038f8; color: #ffffff; }
-.type_dark { background-color: #705848; color: #ffffff; }
-.type_steel { background-color: #b8b8d0; color: #333333; }
-.type_fairy { background-color: #ee99ac; color: #333333; }
+.type_badge:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
 
-/* Hover Effects for Type Buttons */
+
+.type_badges_container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+    align-items: center;
+}
+
+
+.info_row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    gap: 8px;
+}
+
+.info_label {
+    font-weight: 500;
+    color: #333333;
+    min-width: 50px;
+}
+
+.type_normal { 
+    background-color: #a8a878; 
+    color: #ffffff; 
+    border-color: #8a6f56;
+}
+
+.type_fire { 
+    background-color: #f08030; 
+    color: #ffffff; 
+    border-color: #d1671f;
+}
+
+.type_water { 
+    background-color: #6890f0; 
+    color: #ffffff; 
+    border-color: #4f73d1;
+}
+
+.type_electric { 
+    background-color: #f8d030; 
+    color: #333333; 
+    border-color: #d1b41f;
+}
+
+.type_grass { 
+    background-color: #78c850; 
+    color: #ffffff; 
+    border-color: #5fa43f;
+}
+
+.type_ice { 
+    background-color: #98d8d8; 
+    color: #333333; 
+    border-color: #7bb8b8;
+}
+
+.type_fighting { 
+    background-color: #c03028; 
+    color: #ffffff; 
+    border-color: #9f1f1f;
+}
+
+.type_poison { 
+    background-color: #a040a0; 
+    color: #ffffff; 
+    border-color: #803080;
+}
+
+.type_ground { 
+    background-color: #e0c068; 
+    color: #333333; 
+    border-color: #c2a044;
+}
+
+.type_flying { 
+    background-color: #a890f0; 
+    color: #ffffff; 
+    border-color: #8873d1;
+}
+
+.type_psychic { 
+    background-color: #f85888; 
+    color: #ffffff; 
+    border-color: #d13f6f;
+}
+
+.type_bug { 
+    background-color: #a8b820; 
+    color: #ffffff; 
+    border-color: #899516;
+}
+
+.type_rock { 
+    background-color: #b8a038; 
+    color: #ffffff; 
+    border-color: #96822c;
+}
+
+.type_ghost { 
+    background-color: #705898; 
+    color: #ffffff; 
+    border-color: #584278;
+}
+
+.type_dragon { 
+    background-color: #7038f8; 
+    color: #ffffff; 
+    border-color: #5829d1;
+}
+
+.type_dark { 
+    background-color: #705848; 
+    color: #ffffff; 
+    border-color: #584236;
+}
+
+.type_steel { 
+    background-color: #b8b8d0; 
+    color: #333333; 
+    border-color: #9696a8;
+}
+
+.type_fairy { 
+    background-color: #ee99ac; 
+    color: #333333; 
+    border-color: #d1778a;
+}
+
+/* Hover Effects für Type Badges */
 .type_normal:hover { background-color: #9a9a68; }
 .type_fire:hover { background-color: #e07020; }
 .type_water:hover { background-color: #5880e0; }
@@ -97,16 +226,3 @@
 .type_dark:hover { background-color: #604838; }
 .type_steel:hover { background-color: #a8a8c0; }
 .type_fairy:hover { background-color: #de899c; }
-
-
-
-
-
-
-
-
-
-
-
-
-

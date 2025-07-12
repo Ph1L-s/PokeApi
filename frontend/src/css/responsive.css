@@ -1,4 +1,4 @@
-/* Desktop specific - Ensure sticky sidebar works properly */
+/* responisve.css */
 @media (min-width: 769px) {
     .sidebar {
         position: sticky;
@@ -12,7 +12,7 @@
     }
 }
 
-/* Large Desktop - More cards per row */
+
 @media (min-width: 1200px) {
     .pokemon_grid {
         grid-template-columns: repeat(auto-fit, 110px);
@@ -29,10 +29,15 @@
     }
 }
 
-/* Tablet Styles - 768px and below */
+/* Tablet Styles - 768px  */
 @media (max-width: 768px) {
     body {
         padding-top: 120px;
+    }
+    .pokemon_types_mini .type_badge {
+        font-size: 8px;
+        padding: 2px 5px;
+        min-width: 22px;
     }
     .loading_spinner {
         width: 45px;
@@ -158,10 +163,21 @@
     }
 }
 
-/* Mobile Styles - 480px and below */
+/* Mobile Styles - 480px  */
 @media (max-width: 480px) {
     body {
         padding-top: 100px;
+    }
+    .pokemon_types_mini .type_badge {
+        font-size: 7px;
+        padding: 1px 4px;
+        border-radius: 6px;
+        min-width: 20px;
+        letter-spacing: 0.2px;
+    }
+    
+    .pokemon_types_mini {
+        min-height: 14px;
     }
     .loading_spinner {
         width: 40px;
@@ -248,10 +264,6 @@
         font-size: 8px;
     }
     
-    .pokemon_types_mini {
-        font-size: 7px;
-    }
-    
     .stats_content {
         width: 98%;
         padding: 15px;
@@ -317,7 +329,7 @@
     }
 }
 
-/* Extra Small Mobile - 360px and below */
+/* Extra Small Mobile - 360px */
 @media (max-width: 360px) {
     .main_content {
         padding: 5px;
@@ -364,8 +376,15 @@
         font-size: 7px;
     }
     
-    .pokemon_types_mini {
+    .pokemon_types_mini .type_badge {
         font-size: 6px;
+        padding: 1px 3px;
+        min-width: 18px;
+        letter-spacing: 0.1px;
+    }
+    
+    .pokemon_types_mini {
+        min-height: 12px;
     }
     
     .stats_content {
@@ -392,7 +411,6 @@
     }
 }
 
-/* Landscape orientation adjustments */
 @media (max-height: 500px) and (orientation: landscape) {
     .sidebar {
         position: static;
@@ -420,7 +438,6 @@
 }
 
 
-/* Print styles */
 @media print {
     .header,
     .sidebar,

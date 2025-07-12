@@ -1,4 +1,4 @@
-/* Mini Pokemon Cards */
+/* mini-cards.css  */
 .pokemon_card_mini {
     background-color: #ffffff;
     border: 1px solid #e0e0e0;
@@ -83,10 +83,35 @@
 }
 
 .pokemon_types_mini {
-    color: #dc143c;
-    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2px;
     margin: 0;
-    text-transform: capitalize;
-    font-size: 8px;
-    line-height: 1.2;
+    line-height: 1;
+    height: auto;
+    min-height: 16px;
+}
+
+.pokemon_types_mini .type_badge {
+    padding: 2px 6px;
+    border-radius: 8px;
+    font-size: 9px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin: 1px 1px;
+    border: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    min-width: 24px;
+    text-align: center;
+    white-space: nowrap;
+    pointer-events: none;
+    transition: none;
+}
+
+.pokemon_types_mini .type_badge:hover {
+    transform: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+    cursor: default;
 }

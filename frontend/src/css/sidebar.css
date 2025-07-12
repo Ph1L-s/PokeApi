@@ -1,4 +1,6 @@
-/* Sidebar Scrollbar Styling - Cross-Browser Alternative */
+/* sidebar.css */
+
+/* Sidebar Styles */
 .sidebar {
     background-color: #ffffff;
     padding: 20px;
@@ -11,67 +13,15 @@
     overflow-y: auto;
     z-index: 100;
     align-self: flex-start;
+
+    scrollbar-width: thin;
+    scrollbar-color: #dc143c #f1f1f1;
     
-    /* Standard Scrollbar Properties */
-    scrollbar-width: thin; /* Firefox */
-    scrollbar-color: #dc143c #f1f1f1; /* Firefox: thumb track */
-    
-    /* Webkit Fallback für Browser die es unterstützen */
-    scrollbar-width: 6px;
+    border-right: 3px solid #dc143c;
+    padding-right: 17px;
+    background: linear-gradient(to right, #ffffff 95%, #f8f8f8 100%);
 }
 
-/* Webkit Support für Browser die es haben */
-.sidebar::-webkit-scrollbar {
-    width: 6px;
-}
-
-.sidebar::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 3px;
-}
-
-.sidebar::-webkit-scrollbar-thumb {
-    background: #dc143c;
-    border-radius: 3px;
-}
-
-.sidebar::-webkit-scrollbar-thumb:hover {
-    background: #b8112e;
-}
-
-/* Alternative für Browser ohne Scrollbar-Styling Support */
-@supports not (scrollbar-width: thin) {
-    .sidebar {
-        /* Füge rechts eine subtile Border hinzu als visueller Hinweis */
-        border-right: 2px solid #dc143c;
-        padding-right: 18px; /* Kompensiere die Border */
-    }
-    
-    /* Optional: Füge Scroll-Indikatoren hinzu */
-    .sidebar::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 2px;
-        height: 20px;
-        background: linear-gradient(to bottom, #dc143c, transparent);
-        opacity: 0.5;
-        pointer-events: none;
-    }
-    
-    .sidebar::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        width: 2px;
-        height: 20px;
-        background: linear-gradient(to top, #dc143c, transparent);
-        opacity: 0.5;
-        pointer-events: none;
-    }
-}
 
 /* Generation Sections */
 .generation_section {
@@ -134,8 +84,6 @@
     border-color: #dc143c;
     box-shadow: 0 2px 8px rgba(220, 20, 60, 0.3);
 }
-
-/* Generation Button Spacing */
 .generations_list .generation_button {
     margin-bottom: 2px;
 }

@@ -51,28 +51,39 @@ function parseEvolutionChain(evolutionChain) {
     console.log("Final evolution array:", evolutions);
     return evolutions;
 }
-    //--------------------------------------------------------------------------------------> get pokemon with details
+//--------------------------------------------------------------------------------------> get pokemon with details
 async function getPokemonWithDetails(pokemonId) {
-    console.log("loading pokemon details:", pokemonId);
-    let pokemon = await getPokemon(pokemonId);
-
-    let speciesData = await response.json();
-    console.log("loaded species data:", speciesData.name);
-    let evolutionChain = null;
-    
-    if (speciesData && speciesData.evolution_chain) {
-        let evolutionUrl = speciesData.evolution_chain.url.replace(POKEAPI_URL, '');
-        let evolutionResponse = await fetch(POKEAPI_URL + evolutionUrl);
-        evolutionChain = await evolutionResponse.json();
-        console.log("loaded evolution chain:", evolutionChain.chain.species.name);
+    try {
+        console.log("loading pokemon details:", pokemonId);
+        
+        let pokemon = await getPokemon(pokemonId);
+        if (!pokemon) {
+            console.error("Pokemon not found:", pokemonId);
+            return null;
+        }
+        
+        let speciesResponse = await fetch(POKEAPI_URL + `pokemon-species/${pokemonId}`);
+        let speciesData = await speciesResponse.json();
+        console.log("loaded species data:", speciesData.name);
+        let evolutionChain = null;
+        
+        if (speciesData && speciesData.evolution_chain) {
+            let evolutionUrl = speciesData.evolution_chain.url.replace(POKEAPI_URL, '');
+            let evolutionResponse = await fetch(POKEAPI_URL + evolutionUrl);
+            evolutionChain = await evolutionResponse.json();
+            console.log("loaded evolution chain:", evolutionChain.chain.species.name);
+        }
+        let detailedPokemon = {
+            ...pokemon,
+            species_info: speciesData,
+            evolution_chain: evolutionChain
+        };
+        
+        console.log("pokemon details done:", pokemon.name);
+        return detailedPokemon;
+        
+    } catch (error) {
+        console.error("getPokemonWithDetails failed:", error);
+        return null;
     }
-    
-    let detailedPokemon = {
-        ...pokemon,
-        species_info: speciesData,
-        evolution_chain: evolutionChain
-    };
-    
-    console.log("pokemon details done:", pokemon.name);
-    return detailedPokemon;
 }

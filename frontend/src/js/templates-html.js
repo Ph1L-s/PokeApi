@@ -1,5 +1,10 @@
 //--------------------------------------------------------------------------------------> Templates-HTML.js
 
+//--------------------------------------------------------------------------------------> Type Badge HTML Function
+function getTypeBadgeHTML(typeName) {
+    return `<span class="type_badge type_${typeName}">${typeName}</span>`;
+}
+
 //--------------------------------------------------------------------------------------> generation Button HTML
 function getGenerationButtonHTML(generationId) {
     return `
@@ -14,8 +19,8 @@ function getNoPokemonHTML() {
     return '<div class="no_pokemon">No pokemon loaded</div>';
 }
 
-//--------------------------------------------------------------------------------------> pokemon card HTML
-function getPokemonCardHTML(pokemon, sprites, typeString) {
+//--------------------------------------------------------------------------------------> pokemon card HTML - 
+function getPokemonCardHTML(pokemon, sprites, typeBadgesHTML) {
     return `
         <div class="pokemon_card_mini" onclick="showPokemonDetails(${pokemon.id})">
             <div class="pokemon_image_mini">
@@ -27,7 +32,7 @@ function getPokemonCardHTML(pokemon, sprites, typeString) {
             <div class="pokemon_info_mini">
                 <h4 class="pokemon_name_mini">${pokemon.name}</h4>
                 <p class="pokemon_id_mini">No. ${pokemon.id}</p>
-                <p class="pokemon_types_mini">${typeString}</p>
+                <div class="pokemon_types_mini">${typeBadgesHTML}</div>
             </div>
         </div>
     `;
@@ -84,8 +89,8 @@ function getEvolutionChainHTML(evolutionChain) {
     return evolutionHTML;
 }
 
-//--------------------------------------------------------------------------------------> Pokemon stats HTML
-function getPokemonStatsHTML(pokemon, sprites, typeString, abilityString, pokemonHeight, pokemonWeight, evolutionChain) {
+//--------------------------------------------------------------------------------------> Pokemon stats HTML - 
+function getPokemonStatsHTML(pokemon, sprites, typeBadgesHTML, abilityString, pokemonHeight, pokemonWeight, evolutionChain) {
     return `
         <div class="stats_overlay" onclick="closeStats()">
             <div class="stats_content" onclick="event.stopPropagation()">
@@ -105,7 +110,10 @@ function getPokemonStatsHTML(pokemon, sprites, typeString, abilityString, pokemo
                 <div class="stats_info">
                     <div class="info_section">
                         <h3>Basic Info</h3>
-                        <p>Types: ${typeString}</p>
+                        <div class="info_row">
+                            <span class="info_label">Types:</span>
+                            <div class="type_badges_container">${typeBadgesHTML}</div>
+                        </div>
                         <p>Height: ${pokemonHeight}m</p>
                         <p>Weight: ${pokemonWeight}kg</p>
                         <p>Abilities: ${abilityString}</p>

@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------------------> pokemon-details.js
 
-//--------------------------------------------------------------------------------------> parse evolution chain data - Anfängerfreundlich
+//--------------------------------------------------------------------------------------> parse evolution chain data
 function parseEvolutionChain(evolutionChain) {
     
     if (!evolutionChain || !evolutionChain.chain) {
@@ -51,28 +51,43 @@ function parseEvolutionChain(evolutionChain) {
     console.log("Final evolution array:", evolutions);
     return evolutions;
 }
+
 //--------------------------------------------------------------------------------------> get pokemon with details
 async function getPokemonWithDetails(pokemonId) {
     try {
         console.log("loading pokemon details:", pokemonId);
         
-        let pokemon = await getPokemon(pokemonId);
+        let [pokemon, speciesResponse] = await Promise.all([
+            getPokemon(pokemonId),
+            fetch(POKEAPI_URL + `pokemon-species/${pokemonId}`)
+        ]);
+        
         if (!pokemon) {
             console.error("Pokemon not found:", pokemonId);
             return null;
         }
         
-        let speciesResponse = await fetch(POKEAPI_URL + `pokemon-species/${pokemonId}`);
+        if (!speciesResponse.ok) {
+            throw new Error(`Species API error! status: ${speciesResponse.status}`); // - verbesserter Error fallback
+        }
+        
         let speciesData = await speciesResponse.json();
         console.log("loaded species data:", speciesData.name);
         let evolutionChain = null;
         
         if (speciesData && speciesData.evolution_chain) {
-            let evolutionUrl = speciesData.evolution_chain.url.replace(POKEAPI_URL, '');
-            let evolutionResponse = await fetch(POKEAPI_URL + evolutionUrl);
-            evolutionChain = await evolutionResponse.json();
-            console.log("loaded evolution chain:", evolutionChain.chain.species.name);
+            try {
+                let evolutionUrl = speciesData.evolution_chain.url.replace(POKEAPI_URL, '');
+                let evolutionResponse = await fetch(POKEAPI_URL + evolutionUrl);
+                if (evolutionResponse.ok) {
+                    evolutionChain = await evolutionResponse.json();
+                    console.log("loaded evolution chain:", evolutionChain.chain.species.name);
+                }
+            } catch (evolutionError) {
+                console.warn("Failed to load evolution chain:", evolutionError); // - Verbesserter Error fallback
+            }
         }
+        
         let detailedPokemon = {
             ...pokemon,
             species_info: speciesData,

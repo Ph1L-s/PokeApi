@@ -6,28 +6,36 @@ async function getAllGenerations() {
         console.log("loading generations...");
     
         let response = await fetch(POKEAPI_URL + "generation");
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         let generationsData = await response.json();
         console.log("generations loaded:", generationsData.results.length);
         return generationsData.results;
     } catch (error) {
         console.error("getAllGenerations:" + error);
-        
+        return [];
     }
 }
+
 //--------------------------------------------------------------------------------------> get generation with Pokemon
 async function getGenerationWithPokemon(generationId) {
     try {
         console.log("loading generation:", generationId);
         let response = await fetch(POKEAPI_URL + `generation/${generationId}`);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
         let generationData = await response.json();
         console.log("generation loaded:", generationData.name, generationData.pokemon_species.length);
         return generationData;
     } catch (error) {
         console.error("getGenerationWithPokemon:" + error);
-        
+        return null;
     }
 }
-//--------------------------------------------------------------------------------------> get first pokemon test
+
+//--------------------------------------------------------------------------------------> get first pokemon test 
 async function getFirstPokemon() {
     try {
         console.log("loading first 20 pokemon...");
@@ -41,6 +49,6 @@ async function getFirstPokemon() {
         return pokemon;
     } catch (error) {
         console.error("getFirstPokemon:" + error);
-        
+        return [];
     }
 }

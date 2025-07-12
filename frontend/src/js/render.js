@@ -15,13 +15,6 @@ function renderPokemonStats(pokemon) {
     
     console.log("rendered stats for:", pokemon.name);
 }
-//--------------------------------------------------------------------------------------> close pokemon stats
-function closeStats() {
-    let stats = document.getElementById('pokemon_stats');
-    if (stats) {
-        stats.classList.remove('active');
-    }
-}
 //--------------------------------------------------------------------------------------> render gnerations in sidebar
 function renderGenerations(generations) {
     let container = document.getElementById('generations_container');

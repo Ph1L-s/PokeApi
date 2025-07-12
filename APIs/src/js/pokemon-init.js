@@ -1,11 +1,14 @@
 //--------------------------------------------------------------------------------------> pokemon app Initialization - pokemon-init.js
-//--------------------------------------------------------------------------------------> initialize Pokedex
+//--------------------------------------------------------------------------------------> initialize Pokedex (OPTIMIERT mit Promise.all)
 async function initPokedex() {
     console.log("initializing pokedex...");
     
     try {
-        let generations = await getAllGenerations();
-        let testPokemon = await getFirstPokemon();
+        let [generations, testPokemon] = await Promise.all([
+            getAllGenerations(),
+            getFirstPokemon()
+        ]);
+        
         console.log("pokedex init done!");
         return {
             generations: generations,

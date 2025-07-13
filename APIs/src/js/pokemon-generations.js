@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------> pokemon-generation.js
+//--------------------------------------------------------------------------------------> pokemon-generations.js
 
 //--------------------------------------------------------------------------------------> get all generations
 async function getAllGenerations() {
@@ -35,20 +35,79 @@ async function getGenerationWithPokemon(generationId) {
     }
 }
 
-//--------------------------------------------------------------------------------------> get first pokemon test 
-async function getFirstPokemon() {
+//--------------------------------------------------------------------------------------> get all pokemon overview
+async function getAllPokemonOverview() {
     try {
-        console.log("loading first 20 pokemon...");
-        let pokemonIds = [];
-        for (let firstPokemonIndex = 1; firstPokemonIndex <= 20; firstPokemonIndex++) {
-            pokemonIds.push(firstPokemonIndex);
+        console.log("loading all pokemon overview...");
+        
+        let allGenerationsData = [];
+        for (let generationId = 1; generationId <= 9; generationId++) {
+            let generationData = await getGenerationWithPokemon(generationId);
+            if (generationData && generationData.pokemon_species) {
+                allGenerationsData.push(generationData);
+            }
         }
         
-        let pokemon = await getMultiplePokemon(pokemonIds);
-        console.log("first pokemon done:", pokemon.length);
-        return pokemon;
+        let allPokemonSpecies = [];
+        for (let genIndex = 0; genIndex < allGenerationsData.length; genIndex++) {
+            let generationData = allGenerationsData[genIndex];
+            for (let speciesIndex = 0; speciesIndex < generationData.pokemon_species.length; speciesIndex++) {
+                let species = generationData.pokemon_species[speciesIndex];
+                let urlParts = species.url.split('/');
+                let pokemonId = parseInt(urlParts[urlParts.length - 2]);
+                
+                let pokemonWithId = {
+                    name: species.name,
+                    url: species.url,
+                    id: pokemonId
+                };
+                allPokemonSpecies.push(pokemonWithId);
+            }
+        }
+        
+        allPokemonSpecies.sort(function(pokemonA, pokemonB) {
+            return pokemonA.id - pokemonB.id;
+        });
+        
+        console.log("all pokemon species collected and sorted:", allPokemonSpecies.length);
+        
+        let overviewData = {
+            allSpecies: allPokemonSpecies,
+            total: allPokemonSpecies.length
+        };
+        
+        console.log("all pokemon overview prepared:", overviewData.total, "total species");
+        return overviewData;
+        
     } catch (error) {
-        console.error("getFirstPokemon:" + error);
+        console.error("getAllPokemonOverview failed:", error);
+        return null;
+    }
+}
+
+//--------------------------------------------------------------------------------------> get pokemon by generation range
+async function getPokemonByGenerationRange(startGeneration, endGeneration) {
+    try {
+        console.log("loading pokemon from generation", startGeneration, "to", endGeneration);
+        
+        let allPokemon = [];
+        for (let generationId = startGeneration; generationId <= endGeneration; generationId++) {
+            let generationData = await getGenerationWithPokemon(generationId);
+            if (generationData && generationData.pokemon_species) {
+                
+                for (let speciesIndex = 0; speciesIndex < generationData.pokemon_species.length; speciesIndex++) {
+                    let species = generationData.pokemon_species[speciesIndex];
+                    let pokemonId = extractIdFromUrl(species.url);
+                    allPokemon.push(pokemonId);
+                }
+            }
+        }
+        
+        let pokemonDetails = await getMultiplePokemon(allPokemon);
+        console.log("pokemon by generation range loaded:", pokemonDetails.length);
+        return pokemonDetails;
+    } catch (error) {
+        console.error("getPokemonByGenerationRange failed:", error);
         return [];
     }
 }

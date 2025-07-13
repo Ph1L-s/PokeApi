@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------> template-functions.js
+/* template-functions.js */
 //--------------------------------------------------------------------------------------> pokemon cardtemplate 
 function getPokemonCardTemplate(pokemon) {
     let sprites = getPokemonSprites(pokemon.id);
@@ -43,15 +43,25 @@ function getGenerationTemplate(generationId) {
     return getGenerationButtonHTML(generationId);
 }
 
+//--------------------------------------------------------------------------------------> generations container template
+function getGenerationsContainerTemplate(normalGenerationsHTML) {
+    return getGenerationsContainerHTML(normalGenerationsHTML);
+}
+
 //--------------------------------------------------------------------------------------> no Pokemon template
 function getNoPokemonTemplate() {
     return getNoPokemonHTML();
 }
 
-//--------------------------------------------------------------------------------------> lmiter controls template
+//--------------------------------------------------------------------------------------> no search results template
+function getNoSearchResultsTemplate() {
+    return getNoSearchResultsHTML();
+}
+
+//--------------------------------------------------------------------------------------> limiter controls template
 function getLimiterTemplate(currentPage, totalPages, totalPokemon) {
-    let startPokemon = (currentPage - 1) * 30 + 1;
-    let endPokemon = Math.min(currentPage * 30, totalPokemon);
+    let startPokemon = (currentPage - 1) * pokemonPerPage + 1;
+    let endPokemon = Math.min(currentPage * pokemonPerPage, totalPokemon);
     
     return getLimiterHTML(currentPage, totalPages, startPokemon, endPokemon, totalPokemon);
 }
@@ -74,7 +84,6 @@ function getStatsTemplate(stats) {
         let statName = stat.stat.name;
         let statValue = stat.base_stat;
         
-        // Calculate percentage for stat bar (max 255 for pokemon stats thanks gpt :d )
         let percentage = Math.min((statValue / 255) * 100, 100);
         statsHTML += getStatTemplate(statName, statValue, percentage);
     }
@@ -95,4 +104,19 @@ function getLoadingTemplate(message) {
 //--------------------------------------------------------------------------------------> error template
 function getErrorTemplate(message) {
     return getErrorHTML(message);
+}
+
+//--------------------------------------------------------------------------------------> search info template  
+function getSearchInfoTemplate(resultCount, searchTerm, generationText) {
+    return getSearchInfoHTML(resultCount, searchTerm, generationText);
+}
+
+//--------------------------------------------------------------------------------------> search suggestion template
+function getSearchSuggestionTemplate(suggestion) {
+    return getSearchSuggestionHTML(suggestion);
+}
+
+//--------------------------------------------------------------------------------------> loading overlay template
+function getLoadingOverlayTemplate(message) {
+    return getLoadingOverlayHTML(message);
 }

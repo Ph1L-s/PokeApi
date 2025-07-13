@@ -68,7 +68,7 @@ async function getPokemonWithDetails(pokemonId) {
         }
         
         if (!speciesResponse.ok) {
-            throw new Error(`Species API error! status: ${speciesResponse.status}`); // - verbesserter Error fallback
+            throw new Error(`Species API error! status: ${speciesResponse.status}`);
         }
         
         let speciesData = await speciesResponse.json();
@@ -84,7 +84,7 @@ async function getPokemonWithDetails(pokemonId) {
                     console.log("loaded evolution chain:", evolutionChain.chain.species.name);
                 }
             } catch (evolutionError) {
-                console.warn("Failed to load evolution chain:", evolutionError); // - Verbesserter Error fallback
+                console.warn("Failed to load evolution chain:", evolutionError); // - Verbesserter Error fallba
             }
         }
         

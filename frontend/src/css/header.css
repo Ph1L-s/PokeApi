@@ -15,7 +15,10 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
 }
 
 .header_title {
@@ -25,4 +28,5 @@
     color: #ffffff;
     text-shadow: 0 3px 6px rgba(0, 0, 0, 0.4);
     letter-spacing: 1px;
+    flex-shrink: 0;
 }

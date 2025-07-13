@@ -207,6 +207,12 @@
     border-color: #d1778a;
 }
 
+.no_search_icon img {
+    width: 48px;
+    height: 48px;
+}
+
+
 /* Hover Effects für Type Badges */
 .type_normal:hover { background-color: #9a9a68; }
 .type_fire:hover { background-color: #e07020; }

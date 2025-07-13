@@ -1,4 +1,4 @@
-//--------------------------------------------------------------------------------------> Templates-HTML.js
+/* templates-helpers.js */
 
 //--------------------------------------------------------------------------------------> Type Badge HTML Function
 function getTypeBadgeHTML(typeName) {
@@ -14,12 +14,40 @@ function getGenerationButtonHTML(generationId) {
     `;
 }
 
+//--------------------------------------------------------------------------------------> generations container HTML - NEW
+function getGenerationsContainerHTML(normalGenerationsHTML) {
+    return `
+        <button class="generation_button generation_all" onclick="loadAllGenerations()">
+            All Generations
+        </button>
+        ${normalGenerationsHTML}
+    `;
+}
+
 //--------------------------------------------------------------------------------------> no Pokemon HTML
 function getNoPokemonHTML() {
     return '<div class="no_pokemon">No pokemon loaded</div>';
 }
 
-//--------------------------------------------------------------------------------------> pokemon card HTML - 
+//--------------------------------------------------------------------------------------> no search results HTML
+function getNoSearchResultsHTML() { 
+    return `
+        <div class="no_search_results">
+            <div class="no_search_icon">
+                <img src="../../../resources/icons/search.png" alt="Search Icon" />
+            </div>
+            <h3>No Pokemon Found</h3>
+            <p>No Pokemon found for "<strong>${currentSearchTerm}</strong>"</p>
+            <p>Try searching for a different name or Pokemon number.</p>
+            <button class="clear_search_button" onclick="clearSearch()">
+                Clear Search
+            </button>
+        </div>
+    `;
+}
+
+
+//--------------------------------------------------------------------------------------> pokemon card HTML
 function getPokemonCardHTML(pokemon, sprites, typeBadgesHTML) {
     return `
         <div class="pokemon_card_mini" onclick="showPokemonDetails(${pokemon.id})">
@@ -89,7 +117,7 @@ function getEvolutionChainHTML(evolutionChain) {
     return evolutionHTML;
 }
 
-//--------------------------------------------------------------------------------------> Pokemon stats HTML - 
+//--------------------------------------------------------------------------------------> Pokemon stats HTML
 function getPokemonStatsHTML(pokemon, sprites, typeBadgesHTML, abilityString, pokemonHeight, pokemonWeight, evolutionChain) {
     return `
         <div class="stats_overlay" onclick="closeStats()">
@@ -150,4 +178,32 @@ function getLoadingHTML(message) {
 //--------------------------------------------------------------------------------------> error HTML
 function getErrorHTML(message) {
     return `<div class="error_message">${message}</div>`;
+}
+
+//--------------------------------------------------------------------------------------> search info HTML
+function getSearchInfoHTML(resultCount, searchTerm, generationText) {
+    return `
+        <div class="search_info">
+            <span class="search_term">"${searchTerm}"</span>
+            <span class="search_results">${resultCount} results</span>
+            <span class="search_location">in ${generationText}</span>
+        </div>
+    `;
+}
+
+//--------------------------------------------------------------------------------------> search suggestion HTML
+function getSearchSuggestionHTML(suggestion) {
+    return `
+        <div class="search_suggestion" onclick="selectSearchSuggestion('${suggestion}')">
+            ${suggestion}
+        </div>
+    `;
+}
+
+//--------------------------------------------------------------------------------------> loading overlay HTML
+function getLoadingOverlayHTML(message) {
+    return `
+        <div class="loading_spinner"></div>
+        <div class="loading_text">${message}</div>
+    `;
 }

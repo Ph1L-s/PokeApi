@@ -50,7 +50,7 @@ async function getPokemonList(limit = 20, offset = 0) {
     }
 }
 
-//--------------------------------------------------------------------------------------> get multiple pokemon (OPTIMIERT mit Promise.all)
+//--------------------------------------------------------------------------------------> get multiple pokemon
 async function getMultiplePokemon(pokemonIds) {
     try{
         console.log("loading multiple pokemon:", pokemonIds.length);

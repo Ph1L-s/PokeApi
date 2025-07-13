@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/header.css">
     <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/searchbar.css">
     <link rel="stylesheet" href="../css/footer.css">
     <link rel="stylesheet" href="../css/cards.css">
     <link rel="stylesheet" href="../css/mini-cards.css">
@@ -18,35 +19,50 @@
     <link rel="stylesheet" href="../css/assets.css">
     <link rel="stylesheet" href="../css/fonts.css">
     <link rel="stylesheet" href="../css/responsive.css">
-
+    
     <!-- API Scripts -->
     <script src="../../../APIs/src/js/pokemon-api-base.js"></script>
     <script src="../../../APIs/src/js/pokemon-generations.js"></script>
     <script src="../../../APIs/src/js/pokemon-details.js"></script>
     <script src="../../../APIs/src/js/pokemon-init.js"></script>
-    
-    <!-- app Scripts -->
-    <script src="../../src/js/script.js"></script>
+
+    <!-- Helper scripts -->
+    <script src="../../src/js/script-helpers.js"></script>
+    <script src="../../src/js/render-helpers.js"></script>
+    <script src="../../src/js/templates-helpers.js"></script>
+    <script src="../../src/js/loader-helpers.js"></script>
+
+    <!-- main scripts -->
     <script src="../../src/js/render.js"></script>
+    <script src="../../src/js/script.js"></script>
     <script src="../../src/js/loader.js"></script>
     <script src="../../src/js/template-functions.js"></script>
-    <script src="../../src/js/templates-html.js"></script>
 </head>
 <body onload="init()">
     
     <header class="header">
         <div class="header_content">
             <h1 class="header_title">PokéDex</h1>
+            <div class="header_search">
+                <input type="text" id="pokemon_search" class="search_input" 
+                       placeholder="Search Pokemon by name or number..." oninput="handleSearchInput()"
+                       onkeydown="handleSearchKeydown(event)">
+                <button class="search_clear_button" onclick="clearSearch()">Clear</button>
+            </div>
         </div>
     </header>
 
     <main class="main_content">
-        <!-- Sidebar with Generation Navigation -->
+ 
         <aside class="sidebar">
             <div class="generation_section">
                 <h3>Generations</h3>
                 <div id="generations_container" class="generations_list">
-                    <!-- Generation buttons will be rendered here -->
+
+                    <button class="generation_button generation_all" onclick="loadAllGenerations()">
+                        All Generations
+                    </button>
+                    
                 </div>
             </div>
         </aside>
@@ -55,7 +71,7 @@
             <div class="content_header">
                 <h2>Pokemon</h2>
                 <div class="view_controls">
-                    <!-- <span class="pokemon_count" id="pokemon_count">Loading...</span> --> <!-- TODO need fixed  -->
+                    
                 </div>
             </div>
             
@@ -65,7 +81,6 @@
         </section>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer_content">
             <p>&copy; 2025 PokéDex - Powered by PokéAPI <br>
@@ -73,9 +88,7 @@
         </div>
     </footer>
 
-    <!-- Stats Container for Pokemon Details -->
     <div id="pokemon_stats" class="stats_container" style="display: none;">
-        <!-- Stats content will be generated dynamically -->
     </div>
 
 </body>

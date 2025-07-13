@@ -1,3 +1,5 @@
+/* main.css */
+
 /* Reset & Base Styles */
 * {
     margin: 0;
@@ -19,7 +21,7 @@ body {
     min-height: 100vh;
 }
 
-/* Main Layout Structure */
+/* Main Layout Structure - Sidebar LINKS, Content RECHTS */
 .main_content {
     max-width: 1200px;
     margin: 0 auto;

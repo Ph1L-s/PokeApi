@@ -3,17 +3,17 @@
 //--------------------------------------------------------------------------------------> get all generations
 async function getAllGenerations() {
     try {
-        console.log("loading generations...");
+        logApiCall("generations");
     
         let response = await fetch(POKEAPI_URL + "generation");
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         let generationsData = await response.json();
-        console.log("generations loaded:", generationsData.results.length);
+        logApiSuccess("generations", generationsData.results.length);
         return generationsData.results;
     } catch (error) {
-        console.error("getAllGenerations:" + error);
+        logApiError("generations", error);
         return [];
     }
 }
@@ -21,16 +21,16 @@ async function getAllGenerations() {
 //--------------------------------------------------------------------------------------> get generation with Pokemon
 async function getGenerationWithPokemon(generationId) {
     try {
-        console.log("loading generation:", generationId);
+        logApiCall("generation/" + generationId);
         let response = await fetch(POKEAPI_URL + `generation/${generationId}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         let generationData = await response.json();
-        console.log("generation loaded:", generationData.name, generationData.pokemon_species.length);
+        logApiSuccess("generation/" + generationId, generationData.pokemon_species.length);
         return generationData;
     } catch (error) {
-        console.error("getGenerationWithPokemon:" + error);
+        logApiError("generation/" + generationId, error);
         return null;
     }
 }
@@ -38,7 +38,7 @@ async function getGenerationWithPokemon(generationId) {
 //--------------------------------------------------------------------------------------> get all pokemon overview
 async function getAllPokemonOverview() {
     try {
-        console.log("loading all pokemon overview...");
+        logApiMessage("loading all pokemon overview");
         
         let allGenerationsData = [];
         for (let generationId = 1; generationId <= 9; generationId++) {
@@ -69,18 +69,16 @@ async function getAllPokemonOverview() {
             return pokemonA.id - pokemonB.id;
         });
         
-        console.log("all pokemon species collected and sorted:", allPokemonSpecies.length);
-        
         let overviewData = {
             allSpecies: allPokemonSpecies,
             total: allPokemonSpecies.length
         };
         
-        console.log("all pokemon overview prepared:", overviewData.total, "total species");
+        logApiMessage("all pokemon overview prepared: " + overviewData.total + " total species");
         return overviewData;
         
     } catch (error) {
-        console.error("getAllPokemonOverview failed:", error);
+        logApiError("all pokemon overview", error);
         return null;
     }
 }
@@ -88,7 +86,7 @@ async function getAllPokemonOverview() {
 //--------------------------------------------------------------------------------------> get pokemon by generation range
 async function getPokemonByGenerationRange(startGeneration, endGeneration) {
     try {
-        console.log("loading pokemon from generation", startGeneration, "to", endGeneration);
+        logApiMessage("loading pokemon from generation " + startGeneration + " to " + endGeneration);
         
         let allPokemon = [];
         for (let generationId = startGeneration; generationId <= endGeneration; generationId++) {
@@ -104,10 +102,10 @@ async function getPokemonByGenerationRange(startGeneration, endGeneration) {
         }
         
         let pokemonDetails = await getMultiplePokemon(allPokemon);
-        console.log("pokemon by generation range loaded:", pokemonDetails.length);
+        logApiSuccess("pokemon by generation range", pokemonDetails.length);
         return pokemonDetails;
     } catch (error) {
-        console.error("getPokemonByGenerationRange failed:", error);
+        logApiError("pokemon by generation range", error);
         return [];
     }
 }

@@ -1,24 +1,52 @@
-/* templates-helpers.js */
+/* templates-helpers.js*/
 
 //--------------------------------------------------------------------------------------> Type Badge HTML Function
 function getTypeBadgeHTML(typeName) {
     return `<span class="type_badge type_${typeName}">${typeName}</span>`;
 }
 
+//--------------------------------------------------------------------------------------> pokemon card HTMLs
+function getPokemonCardHTML(pokemon, sprites, typeBadgesHTML) {
+
+    let primaryType = pokemon.types[0].type.name;
+    let dataAttributes = `data-primary-type="${primaryType}"`;
+    
+    if (pokemon.types.length > 1) {
+        let secondaryType = pokemon.types[1].type.name;
+        dataAttributes += ` data-secondary-type="${secondaryType}"`;
+    }
+    
+    return `
+        <div class="pokemon_card_mini" ${dataAttributes} onclick="showPokemonDetails(${pokemon.id})">
+            <div class="pokemon_image_mini">
+                <img src="${sprites.front}" 
+                     alt="${pokemon.name}" 
+                     class="pokemon_sprite_mini"
+                     onerror="this.src='${sprites.artwork}'">
+            </div>
+            <div class="pokemon_info_mini">
+                <h4 class="pokemon_name_mini">${pokemon.name}</h4>
+                <p class="pokemon_id_mini">No. ${pokemon.id}</p>
+                <div class="pokemon_types_mini">${typeBadgesHTML}</div>
+            </div>
+        </div>
+    `;
+}
+
 //--------------------------------------------------------------------------------------> generation Button HTML
 function getGenerationButtonHTML(generationId) {
     return `
         <button class="generation_button" onclick="loadGeneration(${generationId})">
-            Generation ${generationId}
+            GEN ${generationId}
         </button>
     `;
 }
 
-//--------------------------------------------------------------------------------------> generations container HTML - NEW
+//--------------------------------------------------------------------------------------> generations container HTML
 function getGenerationsContainerHTML(normalGenerationsHTML) {
     return `
         <button class="generation_button generation_all" onclick="loadAllGenerations()">
-            All Generations
+            ALL
         </button>
         ${normalGenerationsHTML}
     `;
@@ -42,26 +70,6 @@ function getNoSearchResultsHTML() {
             <button class="clear_search_button" onclick="clearSearch()">
                 Clear Search
             </button>
-        </div>
-    `;
-}
-
-
-//--------------------------------------------------------------------------------------> pokemon card HTML
-function getPokemonCardHTML(pokemon, sprites, typeBadgesHTML) {
-    return `
-        <div class="pokemon_card_mini" onclick="showPokemonDetails(${pokemon.id})">
-            <div class="pokemon_image_mini">
-                <img src="${sprites.front}" 
-                     alt="${pokemon.name}" 
-                     class="pokemon_sprite_mini"
-                     onerror="this.src='${sprites.artwork}'">
-            </div>
-            <div class="pokemon_info_mini">
-                <h4 class="pokemon_name_mini">${pokemon.name}</h4>
-                <p class="pokemon_id_mini">No. ${pokemon.id}</p>
-                <div class="pokemon_types_mini">${typeBadgesHTML}</div>
-            </div>
         </div>
     `;
 }
@@ -97,18 +105,22 @@ function getNoEvolutionHTML() {
 //--------------------------------------------------------------------------------------> Evolution chain HTML
 function getEvolutionChainHTML(evolutionChain) {
     let evolutionHTML = '<div class="evolution_chain">';
+    
     for (let evolutionChainIndex = 0; evolutionChainIndex < evolutionChain.length; evolutionChainIndex++) {
         const evo = evolutionChain[evolutionChainIndex];
         if (!evo.id) continue;
+        
         const sprites = getPokemonSprites(evo.id);
         evolutionHTML += `
             <div class="evolution_stage">
                 <img src="${sprites.front}" 
                      alt="${evo.name}" 
                      class="evolution_sprite"
+                     onclick="loadEvolutionPokemon(${evo.id})"
                      onerror="this.src='${sprites.artwork}'">
                 <p class="evolution_name">${evo.name}</p>
             </div>`;
+        
         if (evolutionChainIndex < evolutionChain.length - 1) {
             evolutionHTML += '<div class="evolution_arrow">→</div>';
         }
@@ -117,11 +129,15 @@ function getEvolutionChainHTML(evolutionChain) {
     return evolutionHTML;
 }
 
-//--------------------------------------------------------------------------------------> Pokemon stats HTML
+//--------------------------------------------------------------------------------------> Pokemon stats HTML 
 function getPokemonStatsHTML(pokemon, sprites, typeBadgesHTML, abilityString, pokemonHeight, pokemonWeight, evolutionChain) {
+    // Primary Type für Stats Card
+    let primaryType = pokemon.types[0].type.name;
+    let dataAttributes = `data-primary-type="${primaryType}"`;
+    
     return `
         <div class="stats_overlay" onclick="closeStats()">
-            <div class="stats_content" onclick="event.stopPropagation()">
+            <div class="stats_content" ${dataAttributes} onclick="event.stopPropagation()">
                 <button class="stats_close" onclick="closeStats()">×</button>
                 
                 <div class="stats_header">
@@ -152,6 +168,42 @@ function getPokemonStatsHTML(pokemon, sprites, typeBadgesHTML, abilityString, po
                         ${getStatsTemplate(pokemon.stats)}
                     </div>
                 </div>
+            </div>
+        </div>
+    `;
+}
+
+//--------------------------------------------------------------------------------------> stats modal content HTML 
+function getStatsModalContentHTML(pokemon, sprites, typeBadgesHTML, abilityString, pokemonHeight, pokemonWeight, evolutionChain) {
+    return `
+        <button class="stats_close" onclick="closeStats()">×</button>
+        
+        <div class="stats_header">
+            <h2>${pokemon.name}</h2>
+            <p>No. ${pokemon.id}</p>
+        </div>
+        
+        <div class="stats_images">
+            <img src="${sprites.artwork}" alt="${pokemon.name}" class="main_image">
+            
+            ${getEvolutionChainTemplate(evolutionChain)}
+        </div>
+        
+        <div class="stats_info">
+            <div class="info_section">
+                <h3>Basic Info</h3>
+                <div class="info_row">
+                    <span class="info_label">Types:</span>
+                    <div class="type_badges_container">${typeBadgesHTML}</div>
+                </div>
+                <p>Height: ${pokemonHeight}m</p>
+                <p>Weight: ${pokemonWeight}kg</p>
+                <p>Abilities: ${abilityString}</p>
+            </div>
+            
+            <div class="info_section">
+                <h3>Base Stats</h3>
+                ${getStatsTemplate(pokemon.stats)}
             </div>
         </div>
     `;
@@ -205,5 +257,42 @@ function getLoadingOverlayHTML(message) {
     return `
         <div class="loading_spinner"></div>
         <div class="loading_text">${message}</div>
+    `;
+}
+
+//--------------------------------------------------------------------------------------> evolution loading HTML
+function getEvolutionLoadingHTML() {
+    return '<div class="evolution_loading">Loading evolution...</div>';
+}
+
+//--------------------------------------------------------------------------------------> evolution error HTML
+function getEvolutionErrorHTML() {
+    return '<div class="evolution_error">Error loading evolution</div>';
+}
+
+//--------------------------------------------------------------------------------------> compact generation button HTML
+function getCompactGenerationButtonHTML(generationId) {
+    return `
+        <button class="generation_button_compact" onclick="loadGeneration(${generationId})">
+            GEN ${generationId}
+        </button>
+    `;
+}
+
+//--------------------------------------------------------------------------------------> compact all generations button HTML
+function getCompactAllGenerationsButtonHTML() {
+    return `
+        <button class="generation_button_compact generation_all" onclick="loadAllGenerations()">
+            ALL
+        </button>
+    `;
+}
+
+//--------------------------------------------------------------------------------------> compact generations row HTML
+function getCompactGenerationsRowHTML(buttonsHTML) {
+    return `
+        <div class="generations_row">
+            ${buttonsHTML}
+        </div>
     `;
 }

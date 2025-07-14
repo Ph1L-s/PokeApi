@@ -1,0 +1,125 @@
+/* burger.css */
+.burger_menu {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-left: 15px;
+}
+
+.burger_toggle {
+    display: none;
+}
+
+.burger_icon {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.burger_icon:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.burger_icon span {
+    width: 18px;
+    height: 2px;
+    background-color: #ffffff;
+    margin: 2px 0;
+    transition: 0.3s;
+    border-radius: 2px;
+}
+
+.burger_toggle:checked + .burger_icon span:nth-child(1) {
+    transform: rotate(-45deg) translate(-4px, 5px);
+    background-color: #ffcb05;
+}
+
+.burger_toggle:checked + .burger_icon span:nth-child(2) {
+    opacity: 0;
+}
+
+.burger_toggle:checked + .burger_icon span:nth-child(3) {
+    transform: rotate(45deg) translate(-4px, -5px);
+    background-color: #ffcb05;
+}
+
+.burger_toggle:checked + .burger_icon {
+    background-color: rgba(255, 203, 5, 0.2);
+    border-color: rgba(255, 203, 5, 0.5);
+}
+
+.burger_nav {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #1a1a1a;
+    border: 1px solid #333333;
+    border-radius: 8px;
+    min-width: 200px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1001;
+    margin-top: 8px;
+}
+
+.burger_toggle:checked ~ .burger_nav {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dev_header {
+    background-color: #dc143c;
+    color: #ffffff;
+    padding: 10px 15px;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 8px 8px 0 0;
+    text-transform: uppercase;
+}
+
+.log_item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 15px;
+    color: #cccccc;
+    font-size: 13px;
+    cursor: pointer;
+    border-bottom: 1px solid #333333;
+    transition: background-color 0.3s ease;
+}
+
+.log_item:last-child {
+    border-bottom: none;
+    border-radius: 0 0 8px 8px;
+}
+
+.log_item:hover {
+    background-color: #2a2a2a;
+    color: #ffffff;
+}
+
+.log_status {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: #dc143c;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 0 4px rgba(220, 20, 60, 0.3);
+}
+
+.log_status.disabled {
+    background-color: #666666;
+    box-shadow: none;
+}

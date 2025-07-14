@@ -2,10 +2,10 @@
 
 //--------------------------------------------------------------------------------------> create all generations object
 function createAllGenerationsObject(allSpecies) {
-    let sortedGenerationData = new Object(); // objects literal start
+    let sortedGenerationData = new Object();
     sortedGenerationData.id = 'all';
     sortedGenerationData.name = 'all-generations';
-    sortedGenerationData.pokemon_species = allSpecies; // -  objects literal end
+    sortedGenerationData.pokemon_species = allSpecies;
     
     return sortedGenerationData;
 }
@@ -17,7 +17,7 @@ function getAllPokemonIdsFromGeneration() {
         let species = sortedGenerationData.pokemon_species[speciesIndex];
         allPokemonIds.push(species.id);
     }
-    console.log("searching through", allPokemonIds.length, "pokemon in current generation");
+    logSearchMessage("searching through " + allPokemonIds.length + " pokemon in current generation");
     return allPokemonIds;
 }
 
@@ -40,7 +40,7 @@ function filterPokemonBySearchTerm(allPokemonIds) {
             
             if (shouldInclude) {
                 matchingIds.push(pokemonId);
-                console.log("match found:", species.name, "(" + pokemonId + ")");
+                logSearchMessage("match found: " + species.name + " (#" + pokemonId + ")");
             }
         }
     }
@@ -65,18 +65,17 @@ function isNumericSearch(searchTerm) {
         let currentCharacter = searchTerm[characterIndex];
         
         if (currentCharacter < '0' || currentCharacter > '9') {
-            console.log("Found non-numeric character:", currentCharacter);
             return false;
         }
     }
     
-    console.log("All characters are numeric in:", searchTerm);
+    logSearchMessage("numeric search detected: " + searchTerm);
     return true;
 }
 
-//--------------------------------------------------------------------------------------> process Pokemon Species Data
+//--------------------------------------------------------------------------------------> process poke species-data
 function processPokemonSpeciesData(generationData) {
-    console.log("processing pokemon species data for sorting...");
+    logGenerationMessage("processing pokemon species data for sorting");
 
     let pokemonSpeciesWithIds = [];
     for (let speciesIndex = 0; speciesIndex < generationData.pokemon_species.length; speciesIndex++) {
@@ -90,20 +89,11 @@ function processPokemonSpeciesData(generationData) {
             id: pokemonId
         };
         pokemonSpeciesWithIds.push(pokemonWithId);
-        
-        console.log("Processed Pokemon:", pokemonWithId.name, "ID:", pokemonWithId.id);
     }
 
-    console.log("Sorting Pokemon by Pokedex ID...");
     pokemonSpeciesWithIds.sort(function(pokemonA, pokemonB) {
         return pokemonA.id - pokemonB.id;
     });
-    
-    console.log("First 5 Pokemon after sorting:");
-    for (let debugIndex = 0; debugIndex < 5 && debugIndex < pokemonSpeciesWithIds.length; debugIndex++) {
-        let pokemon = pokemonSpeciesWithIds[debugIndex];
-        console.log("  " + (debugIndex + 1) + ". " + pokemon.name + " (ID: " + pokemon.id + ")");
-    }
 
     let sortedGenerationData = {
         id: generationData.id,
@@ -112,28 +102,24 @@ function processPokemonSpeciesData(generationData) {
         pokemon_species: pokemonSpeciesWithIds
     };
     
-    console.log("Pokemon species sorting completed!");
+    logGenerationMessage("pokemon species sorting completed");
     return sortedGenerationData;
 }
 
-//--------------------------------------------------------------------------------------> calculate Pagination Data 
+//--------------------------------------------------------------------------------------> calculate agination-data 
 function calculatePagination(page, itemsPerPage, pokemonSpeciesList) {
-    console.log("calculating pagination for page:", page);
+    logPaginationMessage("calculating pagination for page: " + page);
     
     let startIndex = (page - 1) * itemsPerPage;
-    console.log("Start index:", startIndex);
-    
     let endIndex = startIndex + itemsPerPage;
     if (endIndex > pokemonSpeciesList.length) {
         endIndex = pokemonSpeciesList.length;
     }
-    console.log("End index:", endIndex);
 
     let pokemonIds = [];
     for (let index = startIndex; index < endIndex; index++) {
         let species = pokemonSpeciesList[index];
         pokemonIds.push(species.id);
-        console.log("Added Pokemon ID to page:", species.id, "(" + species.name + ")");
     }
 
     let paginationResult = {
@@ -145,6 +131,63 @@ function calculatePagination(page, itemsPerPage, pokemonSpeciesList) {
         itemsOnThisPage: pokemonIds.length
     };
     
-    console.log("Pagination calculated:", paginationResult.itemsOnThisPage, "items on page", page);
+    logPaginationMessage("pagination calculated: " + paginationResult.itemsOnThisPage + " items on page " + page);
     return paginationResult;
+}
+
+//--------------------------------------------------------------------------------------> prepare stats modal content data
+function prepareStatsModalContentData(pokemon) {
+    let sprites = getPokemonSprites(pokemon.id);
+    let typeBadges = [];
+    let abilities = [];
+    
+    for (let typeIndex = 0; typeIndex < pokemon.types.length; typeIndex++) {
+        let typeName = pokemon.types[typeIndex].type.name;
+        typeBadges.push(getTypeBadgeHTML(typeName)); 
+    }
+    
+    for (let abilityIndex = 0; abilityIndex < pokemon.abilities.length; abilityIndex++) {
+        abilities.push(pokemon.abilities[abilityIndex].ability.name);
+    }
+    
+    let typeBadgesHTML = typeBadges.join(' ');
+    let abilityString = abilities.join(', ');
+    let pokemonHeight = pokemon.height / 10;
+    let pokemonWeight = pokemon.weight / 10;
+    const evolutionChain = parseEvolutionChain(pokemon.evolution_chain);
+    
+    return {
+        sprites: sprites,
+        typeBadgesHTML: typeBadgesHTML,
+        abilityString: abilityString,
+        pokemonHeight: pokemonHeight,
+        pokemonWeight: pokemonWeight,
+        evolutionChain: evolutionChain
+    };
+}
+
+//--------------------------------------------------------------------------------------> find stats content container
+function findStatsContentContainer() {
+    let statsContent = document.getElementsByClassName('stats_content')[0];
+    if (!statsContent) {
+        logErrorMessage("stats content container not found");
+        return null;
+    }
+    return statsContent;
+}
+
+//--------------------------------------------------------------------------------------> find evolution container
+function findEvolutionContainer() {
+    let evolutionContainer = document.getElementsByClassName('evolution_chain')[0];
+    if (!evolutionContainer) {
+        logErrorMessage("evolution container not found");
+        return null;
+    }
+    return evolutionContainer;
+}
+
+//--------------------------------------------------------------------------------------> update stats modal primary type
+function updateStatsModalPrimaryType(statsContent, pokemon) {
+    let primaryType = pokemon.types[0].type.name;
+    statsContent.setAttribute('data-primary-type', primaryType);
 }

@@ -3,24 +3,24 @@
 //--------------------------------------------------------------------------------------> get first pokemon test 
 async function getFirstPokemon() {
     try {
-        console.log("loading first 20 pokemon...");
+        logApiMessage("loading first 20 pokemon for testing");
         let pokemonIds = [];
         for (let firstPokemonIndex = 1; firstPokemonIndex <= 20; firstPokemonIndex++) {
             pokemonIds.push(firstPokemonIndex);
         }
         
         let pokemon = await getMultiplePokemon(pokemonIds);
-        console.log("first pokemon done:", pokemon.length);
+        logApiMessage("first pokemon test completed: " + pokemon.length + " pokemon");
         return pokemon;
     } catch (error) {
-        console.error("getFirstPokemon:" + error);
+        logErrorMessage("getFirstPokemon failed", error);
         return [];
     }
 }
 
 //--------------------------------------------------------------------------------------> initialize Pokedex
 async function initPokedex() {
-    console.log("initializing pokedex...");
+    logAppMessage("initializing pokedex");
     
     try {
         let [generations, testPokemon] = await Promise.all([
@@ -33,17 +33,17 @@ async function initPokedex() {
             testPokemon: testPokemon
         };
         
-        console.log("pokedex init done!");
+        logAppMessage("pokedex initialization completed successfully");
         return initData;
     } catch (error) {
-        console.error("pokedex initialization failed:", error);
+        logErrorMessage("pokedex initialization failed", error);
         return null;
     }
 }
 
 //--------------------------------------------------------------------------------------> initialize app with specific generation
 async function initPokedexWithGeneration(generationId) {
-    console.log("initializing pokedex with generation:", generationId);
+    logAppMessage("initializing pokedex with generation: " + generationId);
     
     try {
         let [generations, generationData] = await Promise.all([
@@ -57,10 +57,10 @@ async function initPokedexWithGeneration(generationId) {
             selectedGenerationId: generationId
         };
         
-        console.log("pokedex init with generation done!");
+        logAppMessage("pokedex initialization with generation completed");
         return initData;
     } catch (error) {
-        console.error("pokedex initialization with generation failed:", error);
+        logErrorMessage("pokedex initialization with generation failed", error);
         return null;
     }
 }
@@ -68,7 +68,7 @@ async function initPokedexWithGeneration(generationId) {
 //--------------------------------------------------------------------------------------> preload essential data
 async function preloadEssentialData() {
     try {
-        console.log("preloading essential data...");
+        logAppMessage("preloading essential data");
         
         let [generations, pokemonTypes, firstGeneration] = await Promise.all([
             getAllGenerations(),
@@ -82,10 +82,10 @@ async function preloadEssentialData() {
             firstGeneration: firstGeneration
         };
         
-        console.log("essential data preloaded successfully");
+        logAppMessage("essential data preloaded successfully");
         return essentialData;
     } catch (error) {
-        console.error("preloadEssentialData failed:", error);
+        logErrorMessage("preloadEssentialData failed", error);
         return null;
     }
 }

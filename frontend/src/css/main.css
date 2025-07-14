@@ -21,7 +21,6 @@ body {
     min-height: 100vh;
 }
 
-/* Main Layout Structure - Sidebar LINKS, Content RECHTS */
 .main_content {
     max-width: 1200px;
     margin: 0 auto;

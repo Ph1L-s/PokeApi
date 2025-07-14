@@ -1,5 +1,4 @@
 /* assets.css */
-
 .loading_spinner {
     width: 50px;
     height: 50px;
@@ -58,14 +57,42 @@
     height: 45px;
 }
 
+.sidebar_toggle {
+    display: none;
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background-color: #dc143c;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 4px 15px rgba(220, 20, 60, 0.3);
+    z-index: 1001;
+    transition: all 0.3s ease;
+}
+
+.sidebar_toggle:hover {
+    background-color: #b8112e;
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(220, 20, 60, 0.4);
+}
+
+.sidebar_toggle:active {
+    transform: translateY(0) scale(0.98);
+}
+
 .type_badge {
     display: inline-block;
-    padding: 3px 8px;
-    border-radius: 12px;
+    padding: 2px 6px;
+    border-radius: 8px;
     font-size: 10px;
     font-weight: bold;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
     margin: 1px 2px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
@@ -77,14 +104,12 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-
 .type_badges_container {
     display: flex;
     flex-wrap: wrap;
     gap: 3px;
     align-items: center;
 }
-
 
 .info_row {
     display: flex;
@@ -106,7 +131,7 @@
 }
 
 .type_fire { 
-    background-color: #f08030; 
+    background-color: #ff4500; 
     color: #ffffff; 
     border-color: #d1671f;
 }
@@ -212,8 +237,6 @@
     height: 48px;
 }
 
-
-/* Hover Effects für Type Badges */
 .type_normal:hover { background-color: #9a9a68; }
 .type_fire:hover { background-color: #e07020; }
 .type_water:hover { background-color: #5880e0; }

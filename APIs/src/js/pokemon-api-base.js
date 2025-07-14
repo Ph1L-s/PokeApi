@@ -2,18 +2,13 @@
 const POKEAPI_URL = "https://pokeapi.co/api/v2/";
 const SPRITES_URL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
 
-//--------------------------------------------------------------------------------------> xxtract ID from pokemonAPI
+//--------------------------------------------------------------------------------------> extract ID from pokemonAPI
 function extractIdFromUrl(url) {
-    console.log("Original URL:", url);
     let urlParts = url.split('/');
-    console.log("URL parts:", urlParts);
     let totalParts = urlParts.length;
-    console.log("amount parts:", totalParts);
     let idPosition = totalParts - 2; 
     let idString = urlParts[idPosition];
-    console.log("id as string:", idString);
     let pokemonId = parseInt(idString);
-    console.log("id number:", pokemonId);
     
     return pokemonId;
 }
@@ -21,15 +16,16 @@ function extractIdFromUrl(url) {
 //--------------------------------------------------------------------------------------> get single pokemon
 async function getPokemon(pokemonId) {
     try{
+        logApiCall("pokemon/" + pokemonId);
         let response = await fetch(POKEAPI_URL + `pokemon/${pokemonId}`);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         let pokemon = await response.json();
-        console.log("loaded pokemon:", pokemon.name);
+        logApiSuccess("pokemon/" + pokemonId, null);
         return pokemon;
     } catch (error) {
-        console.error("get Pokemon asyn didn't not response:" + error);
+        logApiError("pokemon/" + pokemonId, error);
         return null;
     }
 }
@@ -37,15 +33,17 @@ async function getPokemon(pokemonId) {
 //--------------------------------------------------------------------------------------> get Pokemon list
 async function getPokemonList(limit = 20, offset = 0) {
     try{
-        let response = await fetch(POKEAPI_URL + `pokemon?limit=${limit}&offset=${offset}`);
+        let endpoint = `pokemon?limit=${limit}&offset=${offset}`;
+        logApiCall(endpoint);
+        let response = await fetch(POKEAPI_URL + endpoint);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         let listData = await response.json();
-        console.log("loaded pokemon list:", listData.results.length);
+        logApiSuccess(endpoint, listData.results.length);
         return listData;
     } catch (error){
-        console.error("getPokemonList:" + error);
+        logApiError(`pokemon?limit=${limit}&offset=${offset}`, error);
         return null;
     }
 }
@@ -53,34 +51,32 @@ async function getPokemonList(limit = 20, offset = 0) {
 //--------------------------------------------------------------------------------------> get multiple pokemon
 async function getMultiplePokemon(pokemonIds) {
     try{
-        console.log("loading multiple pokemon:", pokemonIds.length);
+        logApiMessage("loading multiple pokemon: " + pokemonIds.length + " total");
         
         let pokemonPromises = pokemonIds.map(async (pokemonId, pokemonFetchIndex) => {
             try {
                 let pokemon = await getPokemon(pokemonId);
                 if (pokemon) {
-                    console.log("loaded pokemon single:", pokemonFetchIndex, pokemon.name);
                     return { pokemon, originalIndex: pokemonFetchIndex, id: pokemonId };
                 }
                 return null;
             } catch (error) {
-                console.error(`Failed to load pokemon ${pokemonId}:`, error);
+                logErrorMessage("Failed to load pokemon " + pokemonId, error);
                 return null;
             }
         });
         
-
         let results = await Promise.all(pokemonPromises);
         let validPokemon = results
             .filter(result => result !== null)
             .sort(function(a, b) { return a.originalIndex - b.originalIndex; })
             .map(result => result.pokemon);
 
-        console.log("multiple pokemon done:", validPokemon.length);
+        logApiSuccess("multiple pokemon", validPokemon.length);
         return validPokemon;
             
     } catch (error) {
-        console.error("getMultiplePokemon:" + error);
+        logApiError("multiple pokemon", error);
         return [];
     }
 }
@@ -100,17 +96,16 @@ function getPokemonSprites(pokemonId) {
 //--------------------------------------------------------------------------------------> get pokemon types
 async function getPokemonTypes() {
     try {
+        logApiCall("types");
         let response = await fetch(POKEAPI_URL + "type");
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         let typesData = await response.json();
-
-        console.log("types loaded:", typesData.results.length);
-
+        logApiSuccess("types", typesData.results.length);
         return typesData.results;
     } catch(error) {
-        console.error("getPokemonTypes:" + error);
+        logApiError("types", error);
         return [];
     }
 }
@@ -118,17 +113,17 @@ async function getPokemonTypes() {
 //--------------------------------------------------------------------------------------> search pokemon
 async function searchPokemon(searchTerm) {
     try {
-        console.log("searching pokemon:", searchTerm);
+        logSearchStart(searchTerm, "single");
         let pokemon = await getPokemon(searchTerm.toLowerCase());
         if (pokemon) {
-            console.log("pokemon found:", pokemon.name);
+            logSearchSuccess(searchTerm, 1);
             return pokemon;
         } else {
-            console.log("pokemon not found:", searchTerm);
+            logSearchEmpty(searchTerm);
             return null;
         }
     } catch (error){
-        console.error("pokemon not found:", searchTerm);
+        logSearchError(searchTerm, error);
         return null;
     }
 }

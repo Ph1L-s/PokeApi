@@ -29,11 +29,9 @@ function parseEvolutionChain(evolutionChain) {
                 id: extractIdFromUrl(current.species.url)
             };
             evolutions.push(secondEvolution);
-            console.log("Added second evolution:", secondEvolution.name, "with ID:", secondEvolution.id);
             
             if (current.evolves_to && current.evolves_to.length > 0) {
                 current = current.evolves_to[0];
-                console.log("Found third evolution:", current.species.name);
                 let thirdEvolution = {
                     name: current.species.name,
                     id: extractIdFromUrl(current.species.url)
@@ -47,15 +45,14 @@ function parseEvolutionChain(evolutionChain) {
         evolutionNames.push(evolutions[evolutionIndex].name);
     }
     let evolutionString = evolutionNames.join(' → ');
-    console.log("evolution chain parsed:", evolutionString);
-    console.log("Final evolution array:", evolutions);
+    logEvolutionChain(firstPokemon.name, evolutions.length);
     return evolutions;
 }
 
 //--------------------------------------------------------------------------------------> get pokemon with details
 async function getPokemonWithDetails(pokemonId) {
     try {
-        console.log("loading pokemon details:", pokemonId);
+        logPokemonDetailsStart(pokemonId);
         
         let [pokemon, speciesResponse] = await Promise.all([
             getPokemon(pokemonId),
@@ -63,7 +60,7 @@ async function getPokemonWithDetails(pokemonId) {
         ]);
         
         if (!pokemon) {
-            console.error("Pokemon not found:", pokemonId);
+            logErrorMessage("Pokemon not found: " + pokemonId);
             return null;
         }
         
@@ -72,7 +69,6 @@ async function getPokemonWithDetails(pokemonId) {
         }
         
         let speciesData = await speciesResponse.json();
-        console.log("loaded species data:", speciesData.name);
         let evolutionChain = null;
         
         if (speciesData && speciesData.evolution_chain) {
@@ -81,10 +77,9 @@ async function getPokemonWithDetails(pokemonId) {
                 let evolutionResponse = await fetch(POKEAPI_URL + evolutionUrl);
                 if (evolutionResponse.ok) {
                     evolutionChain = await evolutionResponse.json();
-                    console.log("loaded evolution chain:", evolutionChain.chain.species.name);
                 }
             } catch (evolutionError) {
-                console.warn("Failed to load evolution chain:", evolutionError); // - Verbesserter Error fallba
+                logEvolutionError(pokemon.name, evolutionError);
             }
         }
         
@@ -94,11 +89,11 @@ async function getPokemonWithDetails(pokemonId) {
             evolution_chain: evolutionChain
         };
         
-        console.log("pokemon details done:", pokemon.name);
+        logPokemonDetailsSuccess(pokemon.name, pokemonId);
         return detailedPokemon;
         
     } catch (error) {
-        console.error("getPokemonWithDetails failed:", error);
+        logPokemonDetailsError(pokemonId, error);
         return null;
     }
 }

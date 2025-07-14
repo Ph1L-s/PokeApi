@@ -1,4 +1,4 @@
-/* render-helpers.js */
+/*  render-helpers.js */
 
 //--------------------------------------------------------------------------------------> build normal generations HTML
 function buildNormalGenerationsHTML(generations) {
@@ -15,13 +15,13 @@ function tryInsertGenerationsHTML(normalGenerationsHTML) {
     let allButton = document.getElementById('all_generations_button');
     if (allButton) {
         allButton.insertAdjacentHTML('afterend', normalGenerationsHTML);
-        console.log("Added generation buttons after existing 'All Generations' button");
+        logRenderMessage("Added generation buttons after existing 'All Generations' button");
         return true;
     } else {
         let allButtons = document.getElementsByClassName('generation_all');
         if (allButtons.length > 0) {
             allButtons[0].insertAdjacentHTML('afterend', normalGenerationsHTML);
-            console.log("Added generation buttons after 'All Generations' button (found by class)");
+            logRenderMessage("Added generation buttons after 'All Generations' button (found by class)");
             return true;
         }
     }
@@ -60,7 +60,7 @@ function findContentHeaderElement() {
             let h2Elements = contentHeaderDiv.getElementsByTagName('h2');
             if (h2Elements.length > 0) {
                 contentHeader = h2Elements[0];
-                console.log("Found content header via class and tag name");
+                logRenderMessage("Found content header via class and tag name");
             }
         }
     }
@@ -89,26 +89,26 @@ function buildContentHeaderText(resultCount) {
 //--------------------------------------------------------------------------------------> remove active from all generation buttons
 function removeActiveFromAllGenerationButtons() {
     let allButtons = document.getElementsByClassName('generation_button');
-    console.log("Found", allButtons.length, "generation buttons to deactivate");
+    logRenderMessage("Found " + allButtons.length + " generation buttons to deactivate");
     
     for (let buttonIndex = 0; buttonIndex < allButtons.length; buttonIndex++) {
         let button = allButtons[buttonIndex];
         button.classList.remove('active');
     }
-    console.log("Removed active class from all generation buttons");
+    logRenderMessage("Removed active class from all generation buttons");
 }
 
 //--------------------------------------------------------------------------------------> activate specific generation button
 function activateSpecificGenerationButton(generationId) {
-    console.log("Activating button for generation:", generationId);
+    logRenderMessage("Activating button for generation: " + generationId);
     
     if (generationId === 'all') {
         let allButtons = document.getElementsByClassName('generation_all');
         if (allButtons.length > 0) {
             allButtons[0].classList.add('active');
-            console.log("Activated 'All Generations' button");
+            logRenderMessage("Activated 'All Generations' button");
         } else {
-            console.warn("All Generations button not found by class");
+            logErrorMessage("All Generations button not found by class");
         }
     } else {
         let allButtons = document.getElementsByClassName('generation_button');
@@ -120,11 +120,11 @@ function activateSpecificGenerationButton(generationId) {
             
             if (onclickAttr === expectedOnclick) {
                 button.classList.add('active');
-                console.log("Activated Generation", generationId, "button");
+                logRenderMessage("Activated Generation " + generationId + " button");
                 return;
             }
         }
         
-        console.warn("Generation", generationId, "button not found");
+        logErrorMessage("Generation " + generationId + " button not found");
     }
 }

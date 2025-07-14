@@ -14,7 +14,7 @@ function getGenerationButtonHTML(generationId) {
     `;
 }
 
-//--------------------------------------------------------------------------------------> generations container HTML - NEW
+//--------------------------------------------------------------------------------------> generations container HTML 
 function getGenerationsContainerHTML(normalGenerationsHTML) {
     return `
         <button class="generation_button generation_all" onclick="loadAllGenerations()">

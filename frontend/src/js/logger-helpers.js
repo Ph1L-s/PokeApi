@@ -2,7 +2,6 @@
 //--------------------------------------------------------------------------------------> loggsettings
 let logsEnabled = true;
 
-
 let apiLogs = true;
 let renderLogs = true;
 let pageLogs = true;
@@ -10,7 +9,7 @@ let generationLogs = true;
 let searchLogs = true;
 let pokemonLogs = true;
 let loadingLogs = true;
-let paginationLogs = true
+let paginationLogs = true;
 let evolutionLogs = true;
 let appLogs = true;
 let errorLogs = true;

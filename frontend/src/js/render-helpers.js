@@ -15,13 +15,11 @@ function tryInsertGenerationsHTML(normalGenerationsHTML) {
     let allButton = document.getElementById('all_generations_button');
     if (allButton) {
         allButton.insertAdjacentHTML('afterend', normalGenerationsHTML);
-        logRenderMessage("Added generation buttons after existing 'All Generations' button");
         return true;
     } else {
         let allButtons = document.getElementsByClassName('generation_all');
         if (allButtons.length > 0) {
             allButtons[0].insertAdjacentHTML('afterend', normalGenerationsHTML);
-            logRenderMessage("Added generation buttons after 'All Generations' button (found by class)");
             return true;
         }
     }
@@ -60,7 +58,6 @@ function findContentHeaderElement() {
             let h2Elements = contentHeaderDiv.getElementsByTagName('h2');
             if (h2Elements.length > 0) {
                 contentHeader = h2Elements[0];
-                logRenderMessage("Found content header via class and tag name");
             }
         }
     }
@@ -88,43 +85,95 @@ function buildContentHeaderText(resultCount) {
 
 //--------------------------------------------------------------------------------------> remove active from all generation buttons
 function removeActiveFromAllGenerationButtons() {
-    let allButtons = document.getElementsByClassName('generation_button');
-    logRenderMessage("Found " + allButtons.length + " generation buttons to deactivate");
-    
-    for (let buttonIndex = 0; buttonIndex < allButtons.length; buttonIndex++) {
-        let button = allButtons[buttonIndex];
-        button.classList.remove('active');
+    let desktopButtons = document.getElementsByClassName('generation_button');
+    for (let buttonIndex = 0; buttonIndex < desktopButtons.length; buttonIndex++) {
+        desktopButtons[buttonIndex].classList.remove('active');
     }
-    logRenderMessage("Removed active class from all generation buttons");
+    
+    let mobileButtons = document.getElementsByClassName('generation_button_compact');
+    for (let buttonIndex = 0; buttonIndex < mobileButtons.length; buttonIndex++) {
+        mobileButtons[buttonIndex].classList.remove('active');
+    }
 }
 
 //--------------------------------------------------------------------------------------> activate specific generation button
 function activateSpecificGenerationButton(generationId) {
-    logRenderMessage("Activating button for generation: " + generationId);
-    
     if (generationId === 'all') {
-        let allButtons = document.getElementsByClassName('generation_all');
-        if (allButtons.length > 0) {
-            allButtons[0].classList.add('active');
-            logRenderMessage("Activated 'All Generations' button");
-        } else {
-            logErrorMessage("All Generations button not found by class");
-        }
-    } else {
-        let allButtons = document.getElementsByClassName('generation_button');
-        let expectedOnclick = 'loadGeneration(' + generationId + ')';
-        
-        for (let buttonIndex = 0; buttonIndex < allButtons.length; buttonIndex++) {
-            let button = allButtons[buttonIndex];
-            let onclickAttr = button.getAttribute('onclick');
-            
-            if (onclickAttr === expectedOnclick) {
-                button.classList.add('active');
-                logRenderMessage("Activated Generation " + generationId + " button");
-                return;
+        let desktopAllButtons = document.getElementsByClassName('generation_button');
+        for (let buttonIndex = 0; buttonIndex < desktopAllButtons.length; buttonIndex++) {
+            if (desktopAllButtons[buttonIndex].classList.contains('generation_all')) {
+                desktopAllButtons[buttonIndex].classList.add('active');
+                break;
             }
         }
         
-        logErrorMessage("Generation " + generationId + " button not found");
+        let mobileAllButtons = document.getElementsByClassName('generation_button_compact');
+        for (let buttonIndex = 0; buttonIndex < mobileAllButtons.length; buttonIndex++) {
+            if (mobileAllButtons[buttonIndex].classList.contains('generation_all')) {
+                mobileAllButtons[buttonIndex].classList.add('active');
+                break;
+            }
+        }
+    } else {
+        let expectedOnclick = 'loadGeneration(' + generationId + ')';
+        
+        let desktopButtons = document.getElementsByClassName('generation_button');
+        for (let buttonIndex = 0; buttonIndex < desktopButtons.length; buttonIndex++) {
+            let button = desktopButtons[buttonIndex];
+            let onclickAttr = button.getAttribute('onclick');
+            if (onclickAttr === expectedOnclick) {
+                button.classList.add('active');
+                break;
+            }
+        }
+
+        let mobileButtons = document.getElementsByClassName('generation_button_compact');
+        for (let buttonIndex = 0; buttonIndex < mobileButtons.length; buttonIndex++) {
+            let button = mobileButtons[buttonIndex];
+            let onclickAttr = button.getAttribute('onclick');
+            if (onclickAttr === expectedOnclick) {
+                button.classList.add('active');
+                break;
+            }
+        }
     }
+}
+
+//--------------------------------------------------------------------------------------> update compact generation buttons
+function updateCompactGenerationButtons() {
+    let compactContainer = document.getElementById('compact_generations');
+    if (compactContainer && pokedexData && pokedexData.generations) {
+        compactContainer.innerHTML = getCompactGenerationsTemplate(pokedexData.generations);
+    }
+}
+
+//--------------------------------------------------------------------------------------> find pokemon container element
+function findPokemonContainerElement() {
+    let container = document.getElementById('pokemon_container');
+    if (!container) {
+        logErrorMessage("pokemon container not found");
+        return null;
+    }
+    return container;
+}
+
+//--------------------------------------------------------------------------------------> add image loading effects helper
+function addImageLoadingEffectsToContainer() {
+    let images = document.getElementsByClassName('pokemon_sprite_mini');
+    
+    for (let imgIndex = 0; imgIndex < images.length; imgIndex++) {
+        let img = images[imgIndex];
+        img.classList.add('loading');
+
+        if (img.complete && img.naturalHeight !== 0) {
+            img.classList.remove('loading');
+            img.classList.add('loaded');
+        } else if (img.complete && img.naturalHeight === 0) {
+            img.classList.remove('loading');
+            img.classList.add('error');
+            logErrorMessage("Image failed to load: " + img.alt);
+        }
+    }
+    
+    return images.length;
 }

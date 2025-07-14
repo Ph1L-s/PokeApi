@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PokéDex</title>
-    
-        <link rel="icon" type="image/png" href="../../../resources/icons/pokeball.png">
+
+    <link rel="icon" type="image/png" href="../../../resources/icons/pokeball.png">
 
     <!-- CSS-files -->
     <link rel="stylesheet" href="../css/main.css">
     <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/burger.css">
     <link rel="stylesheet" href="../css/sidebar.css">
     <link rel="stylesheet" href="../css/searchbar.css">
     <link rel="stylesheet" href="../css/footer.css">
@@ -19,11 +21,11 @@
     <link rel="stylesheet" href="../css/assets.css">
     <link rel="stylesheet" href="../css/fonts.css">
     <link rel="stylesheet" href="../css/responsive.css">
-    
+
     <!-- logger scripts -->
-     <script src="../../src/js/logger-helpers.js"></script>
+    <script src="../../src/js/logger-helpers.js"></script>
     <script src="../../src/js/logger.js"></script>
-    
+
     <!-- API Scripts -->
     <script src="../../../APIs/src/js/pokemon-api-base.js"></script>
     <script src="../../../APIs/src/js/pokemon-generations.js"></script>
@@ -42,45 +44,67 @@
     <script src="../../src/js/loader.js"></script>
     <script src="../../src/js/template.js"></script>
 
-    
 </head>
+
 <body onload="init()">
-    
+
     <header class="header">
         <div class="header_content">
             <h1 class="header_title">PokéDex</h1>
             <div class="header_search">
-                <input type="text" id="pokemon_search" class="search_input" 
-                       placeholder="Search Pokemon by name or number..." oninput="handleSearchInput()"
-                       onkeydown="handleSearchKeydown(event)">
-                <button class="search_clear_button" onclick="clearSearch()">Clear</button>
+                <input type="text" id="pokemon_search" class="search_input"
+                    placeholder="Search Pokemon by name or number..." oninput="handleSearchInput()"
+                    onkeydown="handleSearchKeydown(event)">
+                
+                <div class="burger_menu">
+                    <input type="checkbox" id="burger_toggle" class="burger_toggle">
+                    <label for="burger_toggle" class="burger_icon">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </label>
+
+                    <nav class="burger_nav">
+                        <div class="dev_header">Only for Developer</div>
+                        <div class="log_item" onclick="toggleLogs()">
+                            <span>All Logs</span>
+                            <div class="log_status" id="logs_status"></div>
+                        </div>
+                    </nav>
+                </div>
             </div>
         </div>
     </header>
 
     <main class="main_content">
- 
-        <aside class="sidebar">
+
+        <aside class="sidebar" id="sidebar_main">
+            <div class="sidebar_header">
+                <h3 class="sidebar_title">Generations</h3>
+                <button class="sidebar_close" onclick="closeSidebar()">×</button>
+            </div>
+
             <div class="generation_section">
                 <h3>Generations</h3>
-                <div id="generations_container" class="generations_list">
 
+                <div id="generations_container" class="generations_list">
                     <button class="generation_button generation_all" onclick="loadAllGenerations()">
-                        All Generations
+                        ALL
                     </button>
-                    
+                </div>
+
+                <div id="compact_generations" class="generations_list_compact">
                 </div>
             </div>
         </aside>
-
+        
         <section class="content_area">
             <div class="content_header">
                 <h2>Pokemon</h2>
                 <div class="view_controls">
-                    
                 </div>
             </div>
-            
+
             <div id="pokemon_container" class="pokemon_grid">
                 <div class="loading_message">Loading PokéDex...</div>
             </div>
@@ -90,12 +114,15 @@
     <footer class="footer">
         <div class="footer_content">
             <p>&copy; 2025 PokéDex - Powered by PokéAPI <br>
-            Developed by Phil</p>
+                Developed by Phil</p>
         </div>
     </footer>
 
     <div id="pokemon_stats" class="stats_container" style="display: none;">
     </div>
 
+    <button class="sidebar_toggle" onclick="toggleSidebar()">Generations</button>
+
 </body>
+
 </html>

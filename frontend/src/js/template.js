@@ -1,4 +1,4 @@
-/* template-functions.js */
+/* template.js */
 //--------------------------------------------------------------------------------------> pokemon cardtemplate 
 function getPokemonCardTemplate(pokemon) {
     let sprites = getPokemonSprites(pokemon.id);
@@ -119,4 +119,33 @@ function getSearchSuggestionTemplate(suggestion) {
 //--------------------------------------------------------------------------------------> loading overlay template
 function getLoadingOverlayTemplate(message) {
     return getLoadingOverlayHTML(message);
+}
+
+//--------------------------------------------------------------------------------------> compact generation button template
+function getCompactGenerationTemplate(generationId) {
+    return getCompactGenerationButtonHTML(generationId);
+}
+
+//--------------------------------------------------------------------------------------> compact generations container template
+function getCompactGenerationsTemplate(generations) {
+    let compactHTML = '';
+    
+    let allButtonHTML = getCompactAllGenerationsButtonHTML();
+    compactHTML += getCompactGenerationsRowHTML(allButtonHTML);
+
+    let currentRowHTML = '';
+    for (let genIndex = 0; genIndex < generations.length; genIndex++) {
+        let generationId = genIndex + 1;
+        currentRowHTML += getCompactGenerationTemplate(generationId);
+        
+        let rowIsFull = currentRowHTML.split('generation_button_compact').length - 1 >= 2;
+        let isLastGeneration = genIndex === generations.length - 1;
+        
+        if (rowIsFull || isLastGeneration) {
+            compactHTML += getCompactGenerationsRowHTML(currentRowHTML);
+            currentRowHTML = '';
+        }
+    }
+    
+    return compactHTML;
 }

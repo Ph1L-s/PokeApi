@@ -6,7 +6,9 @@ function showLoadingOverlay(message = "loading...") {
     if (container) {
         let loadingOverlay = createLoadingOverlayElement(message);
         appendLoadingOverlay(container, loadingOverlay);
-        logLoadingShow(message);
+        logLoadingShow("Created and appended loading overlay with message: " + message);
+    } else {
+        logErrorMessage("pokemon container not found for loading overlay");
     }
 }
 
@@ -15,7 +17,9 @@ function hideLoadingOverlay() {
     let container = findPokemonContainer();
     if (container) {
         removeLoadingOverlay(container);
-        logLoadingHide();
+        logLoadingHide("Removed loading overlay and has_overlay class from container");
+    } else {
+        logErrorMessage("pokemon container not found for hiding overlay");
     }
 }
 
@@ -24,7 +28,9 @@ function showLoading(message = "loading...") {
     let container = findPokemonContainer();
     if (container) {
         setLoadingContent(container, message);
-        logLoadingShow(message);
+        logLoadingShow("Set loading content with message: " + message);
+    } else {
+        logErrorMessage("pokemon container not found for loading message");
     }
 }
 
@@ -33,6 +39,8 @@ function showError(message) {
     let container = findPokemonContainer();
     if (container) {
         setErrorContent(container, message);
+    } else {
+        logErrorMessage("pokemon container not found for error message");
     }
     
     logErrorMessage("error displayed: " + message);

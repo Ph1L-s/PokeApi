@@ -134,3 +134,60 @@ function calculatePagination(page, itemsPerPage, pokemonSpeciesList) {
     logPaginationMessage("pagination calculated: " + paginationResult.itemsOnThisPage + " items on page " + page);
     return paginationResult;
 }
+
+//--------------------------------------------------------------------------------------> prepare stats modal content data
+function prepareStatsModalContentData(pokemon) {
+    let sprites = getPokemonSprites(pokemon.id);
+    let typeBadges = [];
+    let abilities = [];
+    
+    for (let typeIndex = 0; typeIndex < pokemon.types.length; typeIndex++) {
+        let typeName = pokemon.types[typeIndex].type.name;
+        typeBadges.push(getTypeBadgeHTML(typeName)); 
+    }
+    
+    for (let abilityIndex = 0; abilityIndex < pokemon.abilities.length; abilityIndex++) {
+        abilities.push(pokemon.abilities[abilityIndex].ability.name);
+    }
+    
+    let typeBadgesHTML = typeBadges.join(' ');
+    let abilityString = abilities.join(', ');
+    let pokemonHeight = pokemon.height / 10;
+    let pokemonWeight = pokemon.weight / 10;
+    const evolutionChain = parseEvolutionChain(pokemon.evolution_chain);
+    
+    return {
+        sprites: sprites,
+        typeBadgesHTML: typeBadgesHTML,
+        abilityString: abilityString,
+        pokemonHeight: pokemonHeight,
+        pokemonWeight: pokemonWeight,
+        evolutionChain: evolutionChain
+    };
+}
+
+//--------------------------------------------------------------------------------------> find stats content container
+function findStatsContentContainer() {
+    let statsContent = document.getElementsByClassName('stats_content')[0];
+    if (!statsContent) {
+        logErrorMessage("stats content container not found");
+        return null;
+    }
+    return statsContent;
+}
+
+//--------------------------------------------------------------------------------------> find evolution container
+function findEvolutionContainer() {
+    let evolutionContainer = document.getElementsByClassName('evolution_chain')[0];
+    if (!evolutionContainer) {
+        logErrorMessage("evolution container not found");
+        return null;
+    }
+    return evolutionContainer;
+}
+
+//--------------------------------------------------------------------------------------> update stats modal primary type
+function updateStatsModalPrimaryType(statsContent, pokemon) {
+    let primaryType = pokemon.types[0].type.name;
+    statsContent.setAttribute('data-primary-type', primaryType);
+}

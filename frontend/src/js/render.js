@@ -32,6 +32,8 @@ function renderGenerations(generations) {
     if (!insertedSuccessfully) {
         logRenderMessage("No existing 'All Generations' button found, creating complete container");
         container.innerHTML = getGenerationsContainerTemplate(normalGenerationsHTML);
+    } else {
+        logRenderMessage("Added generation buttons after existing 'All Generations' button");
     }
     
     logRenderSuccess("generations", generations.length);
@@ -39,9 +41,8 @@ function renderGenerations(generations) {
 
 //--------------------------------------------------------------------------------------> render pokemon grid with limits
 function renderPokemonGridWithLimiter(pokemonList, page) {
-    let container = document.getElementById('pokemon_container');
+    let container = findPokemonContainerElement();
     if (!container) {
-        logErrorMessage("pokemon container not found");
         return;
     }
     
@@ -61,9 +62,8 @@ function renderPokemonGridWithLimiter(pokemonList, page) {
 
 //--------------------------------------------------------------------------------------> render search results
 function renderSearchResults(pokemonList) {
-    let container = document.getElementById('pokemon_container');
+    let container = findPokemonContainerElement();
     if (!container) {
-        logErrorMessage("pokemon container not found");
         return;
     }
     
@@ -84,7 +84,7 @@ function renderSearchResults(pokemonList) {
 
 //--------------------------------------------------------------------------------------> render no search results
 function renderNoSearchResults() {
-    let container = document.getElementById('pokemon_container');
+    let container = findPokemonContainerElement();
     if (container) {
         container.innerHTML = getNoSearchResultsTemplate();
     }
@@ -108,22 +108,7 @@ function updateContentHeaderForSearch(resultCount) {
 
 //--------------------------------------------------------------------------------------> Add image loading effects
 function addImageLoadingEffects() {
-    let images = document.getElementsByClassName('pokemon_sprite_mini');
-    logRenderMessage("Adding loading effects to " + images.length + " pokemon images");
-    
-    for (let imgIndex = 0; imgIndex < images.length; imgIndex++) {
-        let img = images[imgIndex];
-        img.classList.add('loading');
-
-        if (img.complete && img.naturalHeight !== 0) {
-            img.classList.remove('loading');
-            img.classList.add('loaded');
-        } else if (img.complete && img.naturalHeight === 0) {
-            img.classList.remove('loading');
-            img.classList.add('error');
-            logErrorMessage("Image failed to load: " + img.alt);
-        }
-    }
-    
+    let imageCount = addImageLoadingEffectsToContainer();
+    logRenderMessage("Adding loading effects to " + imageCount + " pokemon images");
     logRenderMessage("Loading effects added to all pokemon images");
 }

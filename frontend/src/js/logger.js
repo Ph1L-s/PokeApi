@@ -155,3 +155,12 @@ function logEvolutionChain(pokemonName, chainLength) {
 function logEvolutionError(pokemonName, error) {
     logErrorMessage("failed to load evolution for " + pokemonName, error);
 }
+
+//--------------------------------------------------------------------------------------> evolution interaction logs
+function logEvolutionClick(pokemonName, pokemonId) {
+    logEvolutionMessage("clicked evolution pokemon: " + pokemonName + " (#" + pokemonId + ")");
+}
+
+function logEvolutionSwitch(fromPokemon, toPokemon) {
+    logEvolutionMessage("switched from " + fromPokemon + " to " + toPokemon + " in same modal");
+}

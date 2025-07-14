@@ -16,10 +16,16 @@ async function init() {
     logAppStart();
     showLoading("initializing pokédx...");
     
+    let statusElement = document.getElementById('logs_status');
+    if (statusElement && !logsEnabled) {
+        statusElement.classList.add('disabled');
+    }
+    
     try {
         pokedexData = await initPokedex();
         if (pokedexData) {
             renderGenerations(pokedexData.generations);
+            initCompactSidebar();
             await loadGeneration(1);
             logAppReady();
         } else {
@@ -252,5 +258,121 @@ function closeStats() {
     let stats = document.getElementById('pokemon_stats');
     if (stats) {
         stats.classList.remove('active');
+    }
+}
+
+//--------------------------------------------------------------------------------------> toggle sidebar
+function toggleSidebar() {
+    let sidebar = document.getElementsByClassName('sidebar')[0];
+    if (sidebar) {
+        sidebar.classList.toggle('show');
+        logRenderMessage("Sidebar toggled");
+    }
+}
+
+//--------------------------------------------------------------------------------------> close sidebar
+function closeSidebar() {
+    let sidebar = document.getElementsByClassName('sidebar')[0];
+    if (sidebar) {
+        sidebar.classList.remove('show');
+        logRenderMessage("Sidebar closed");
+    }
+}
+
+//--------------------------------------------------------------------------------------> initialize compact sidebar
+function initCompactSidebar() {
+    let compactContainer = document.getElementById('compact_generations');
+    if (compactContainer && pokedexData && pokedexData.generations) {
+        compactContainer.innerHTML = getCompactGenerationsTemplate(pokedexData.generations);
+        logRenderMessage("Compact sidebar initialized");
+    }
+}
+
+//--------------------------------------------------------------------------------------> toggle logs
+function toggleLogs() {
+    logsEnabled = !logsEnabled;
+
+    let statusElement = document.getElementById('logs_status');
+    if (statusElement) {
+        if (logsEnabled) {
+            statusElement.classList.remove('disabled');
+        } else {
+            statusElement.classList.add('disabled');
+        }
+    }
+    
+    apiLogs = logsEnabled;
+    renderLogs = logsEnabled;
+    pageLogs = logsEnabled;
+    generationLogs = logsEnabled;
+    searchLogs = logsEnabled;
+    pokemonLogs = logsEnabled;
+    loadingLogs = logsEnabled;
+    paginationLogs = logsEnabled;
+    evolutionLogs = logsEnabled;
+    appLogs = logsEnabled;
+    errorLogs = logsEnabled;
+    
+    logAppMessage('All logs ' + (logsEnabled ? 'enabled' : 'disabled'));
+}
+
+//--------------------------------------------------------------------------------------> load evolution pokemon in same modal
+async function loadEvolutionPokemon(pokemonId) {
+    logPokemonDetailsStart(pokemonId);
+    
+    try {
+        showEvolutionLoading();
+        
+        let pokemon = await getPokemonWithDetails(pokemonId);
+        if (pokemon) {
+            updateStatsModal(pokemon);
+            logPokemonDetailsSuccess(pokemon.name, pokemonId);
+        } else {
+            showEvolutionError("failed to load evolution pokemon");
+        }
+    } catch (error) {
+        logPokemonDetailsError(pokemonId, error);
+        showEvolutionError("failed to load evolution pokemon. please try again.");
+    }
+}
+
+//--------------------------------------------------------------------------------------> update existing stats modal content
+function updateStatsModal(pokemon) {
+    let statsContent = findStatsContentContainer();
+    if (!statsContent) {
+        return;
+    }
+    
+    updateStatsModalPrimaryType(statsContent, pokemon);
+    
+    let modalData = prepareStatsModalContentData(pokemon);
+    statsContent.innerHTML = getStatsModalContentHTML(
+        pokemon, 
+        modalData.sprites, 
+        modalData.typeBadgesHTML, 
+        modalData.abilityString, 
+        modalData.pokemonHeight, 
+        modalData.pokemonWeight, 
+        modalData.evolutionChain
+    );
+    
+    logRenderSuccess("updated stats modal for " + pokemon.name);
+}
+
+//--------------------------------------------------------------------------------------> show loading in evolution area
+function showEvolutionLoading() {
+    let evolutionContainer = findEvolutionContainer();
+    if (evolutionContainer) {
+        evolutionContainer.innerHTML = getEvolutionLoadingHTML();
+        logLoadingShow("evolution pokemon loading");
+    }
+}
+
+//--------------------------------------------------------------------------------------> show evolution error
+function showEvolutionError(message) {
+    let evolutionContainer = findEvolutionContainer();
+    if (evolutionContainer) {
+        evolutionContainer.innerHTML = getEvolutionErrorHTML();
+        logErrorMessage("evolution loading error: " + message);
     }
 }

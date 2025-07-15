@@ -1,6 +1,4 @@
-/* logger-helpers.js */
-//--------------------------------------------------------------------------------------> loggsettings
-let logsEnabled = true;
+let logsEnabled = false;
 
 let apiLogs = true;
 let renderLogs = true;
@@ -14,7 +12,6 @@ let evolutionLogs = true;
 let appLogs = true;
 let errorLogs = true;
 
-//--------------------------------------------------------------------------------------> helper functions
 
 function shouldLogApi() {
     return logsEnabled && apiLogs;
@@ -59,8 +56,6 @@ function shouldLogApp() {
 function shouldLogError() {
     return logsEnabled && errorLogs;
 }
-
-//--------------------------------------------------------------------------------------> basic functions
 
 function logApiMessage(message) {
     if (shouldLogApi()) {
@@ -130,8 +125,6 @@ function logErrorMessage(message, error) {
         }
     }
 }
-
-//--------------------------------------------------------------------------------------> control-functions
 
 function enableAllLogs() {
     apiLogs = true;

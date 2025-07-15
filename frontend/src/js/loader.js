@@ -1,6 +1,3 @@
-/* loader.js */
-
-//--------------------------------------------------------------------------------------> show loading Overlay
 function showLoadingOverlay(message = "loading...") {
     let container = findPokemonContainer();
     if (container) {
@@ -12,7 +9,6 @@ function showLoadingOverlay(message = "loading...") {
     }
 }
 
-//--------------------------------------------------------------------------------------> hide loading overlay
 function hideLoadingOverlay() {
     let container = findPokemonContainer();
     if (container) {
@@ -23,7 +19,6 @@ function hideLoadingOverlay() {
     }
 }
 
-//--------------------------------------------------------------------------------------> show loading message
 function showLoading(message = "loading...") {
     let container = findPokemonContainer();
     if (container) {
@@ -34,7 +29,6 @@ function showLoading(message = "loading...") {
     }
 }
 
-//--------------------------------------------------------------------------------------> show error message
 function showError(message) {
     let container = findPokemonContainer();
     if (container) {

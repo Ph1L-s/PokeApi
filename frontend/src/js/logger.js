@@ -1,7 +1,3 @@
-/* logger.js */
-
-//--------------------------------------------------------------------------------------> api logs
-
 function logApiCall(endpoint) {
     logApiMessage("calling " + endpoint);
 }
@@ -17,8 +13,6 @@ function logApiSuccess(endpoint, count) {
 function logApiError(endpoint, error) {
     logErrorMessage(endpoint + " failed to load", error);
 }
-
-//--------------------------------------------------------------------------------------> gen logs
 
 function logGenerationStart(generationId) {
     if (generationId === 'all') {
@@ -44,8 +38,6 @@ function logGenerationError(generationId, error) {
     }
 }
 
-//--------------------------------------------------------------------------------------> page logs
-
 function logPageStart(pageName) {
     logPageMessage("loading " + pageName);
 }
@@ -61,8 +53,6 @@ function logPageSuccess(pageName, itemCount) {
 function logPageError(pageName, error) {
     logErrorMessage(pageName + " failed to load", error);
 }
-
-//--------------------------------------------------------------------------------------> search logs
 
 function logSearchStart(searchTerm, generation) {
     if (generation === 'all') {
@@ -84,8 +74,6 @@ function logSearchError(searchTerm, error) {
     logErrorMessage("search failed for '" + searchTerm + "'", error);
 }
 
-//--------------------------------------------------------------------------------------> poke logs
-
 function logPokemonDetailsStart(pokemonId) {
     logPokemonMessage("loading details for pokemon " + pokemonId);
 }
@@ -97,8 +85,6 @@ function logPokemonDetailsSuccess(pokemonName, pokemonId) {
 function logPokemonDetailsError(pokemonId, error) {
     logErrorMessage("failed to load details for pokemon " + pokemonId, error);
 }
-
-//--------------------------------------------------------------------------------------> render logs
 
 function logRenderStart(componentName) {
     logRenderMessage("rendering " + componentName);
@@ -112,8 +98,6 @@ function logRenderSuccess(componentName, itemCount) {
     }
 }
 
-//--------------------------------------------------------------------------------------> loading logs
-
 function logLoadingShow(message) {
     logLoadingMessage("showing loading: " + message);
 }
@@ -121,8 +105,6 @@ function logLoadingShow(message) {
 function logLoadingHide() {
     logLoadingMessage("hiding loading");
 }
-
-//--------------------------------------------------------------------------------------> app logs
 
 function logAppStart() {
     logAppMessage("starting pokedex app");
@@ -136,8 +118,6 @@ function logAppError(message, error) {
     logErrorMessage(message, error);
 }
 
-//--------------------------------------------------------------------------------------> pageination logs
-
 function logPaginationNext(currentPage, totalPages) {
     logPaginationMessage("loading next page - " + currentPage + " of " + totalPages);
 }
@@ -146,8 +126,6 @@ function logPaginationPrevious(currentPage, totalPages) {
     logPaginationMessage("loading previous page - " + currentPage + " of " + totalPages);
 }
 
-//--------------------------------------------------------------------------------------> evo logs
-
 function logEvolutionChain(pokemonName, chainLength) {
     logEvolutionMessage("evolution chain for " + pokemonName + " - " + chainLength + " stages");
 }
@@ -155,8 +133,6 @@ function logEvolutionChain(pokemonName, chainLength) {
 function logEvolutionError(pokemonName, error) {
     logErrorMessage("failed to load evolution for " + pokemonName, error);
 }
-
-//--------------------------------------------------------------------------------------> evolution interaction logs
 function logEvolutionClick(pokemonName, pokemonId) {
     logEvolutionMessage("clicked evolution pokemon: " + pokemonName + " (#" + pokemonId + ")");
 }

@@ -1,5 +1,3 @@
-/* template.js */
-//--------------------------------------------------------------------------------------> pokemon cardtemplate 
 function getPokemonCardTemplate(pokemon) {
     let sprites = getPokemonSprites(pokemon.id);
     let typeBadges = [];
@@ -20,8 +18,7 @@ function getPokemonCardTemplate(pokemon) {
     
     return getPokemonCardHTML(pokemon, sprites, typeBadgesHTML, dataAttributes);
 }
-
-//--------------------------------------------------------------------------------------> Pokemon stats template 
+ 
 function getPokemonStatsTemplate(pokemon) {
     let sprites = getPokemonSprites(pokemon.id);
     let typeBadges = [];
@@ -39,7 +36,6 @@ function getPokemonStatsTemplate(pokemon) {
     return preparePokemonStatsData(pokemon, sprites, typeBadges, abilities);
 }
 
-//--------------------------------------------------------------------------------------> prepare pokemon stats data
 function preparePokemonStatsData(pokemon, sprites, typeBadges, abilities) {
     let typeBadgesHTML = typeBadges.join(' ');
     let abilityString = abilities.join(', ');
@@ -55,27 +51,22 @@ function preparePokemonStatsData(pokemon, sprites, typeBadges, abilities) {
     return getPokemonStatsHTML(pokemon, sprites, typeBadgesHTML, abilityString, pokemonHeight, pokemonWeight, evolutionChainHTML, statsHTML, dataAttributes);
 }
 
-//--------------------------------------------------------------------------------------> generation Buttontemplate
 function getGenerationTemplate(generationId) {
     return getGenerationButtonHTML(generationId);
 }
 
-//--------------------------------------------------------------------------------------> generations container template
 function getGenerationsContainerTemplate(normalGenerationsHTML) {
     return getGenerationsContainerHTML(normalGenerationsHTML);
 }
 
-//--------------------------------------------------------------------------------------> no Pokemon template
 function getNoPokemonTemplate() {
     return getNoPokemonHTML();
 }
 
-//--------------------------------------------------------------------------------------> no search results template
 function getNoSearchResultsTemplate() {
     return getNoSearchResultsHTML();
 }
 
-//--------------------------------------------------------------------------------------> limiter controls template
 function getLimiterTemplate(currentPage, totalPages, totalPokemon) {
     let startPokemon = (currentPage - 1) * pokemonPerPage + 1;
     let endPokemon = Math.min(currentPage * pokemonPerPage, totalPokemon);
@@ -88,7 +79,6 @@ function getLimiterTemplate(currentPage, totalPages, totalPokemon) {
     return getLimiterHTML(currentPage, totalPages, startPokemon, endPokemon, totalPokemon, previousClass, nextClass, previousDisabled, nextDisabled);
 }
 
-//--------------------------------------------------------------------------------------> Evolution chaintemplate  
 function getEvolutionChainTemplate(evolutionChain) {
     if (!evolutionChain || evolutionChain.length <= 1) {
         return getNoEvolutionHTML();
@@ -98,7 +88,6 @@ function getEvolutionChainTemplate(evolutionChain) {
     return getEvolutionChainHTML(evolutionStagesHTML);
 }
 
-//--------------------------------------------------------------------------------------> prepare evolution stages
 function prepareEvolutionStages(evolutionChain) {
     let evolutionStagesHTML = '';
     
@@ -117,7 +106,6 @@ function prepareEvolutionStages(evolutionChain) {
     return evolutionStagesHTML;
 }
 
-//--------------------------------------------------------------------------------------> Base stats template
 function getStatsTemplate(stats) {
     let statsHTML = '';
     
@@ -133,42 +121,34 @@ function getStatsTemplate(stats) {
     return statsHTML;
 }
 
-//--------------------------------------------------------------------------------------> stat row template
 function getStatTemplate(statName, statValue, percentage) {
     return getStatRowHTML(statName, statValue, percentage);
 }
 
-//--------------------------------------------------------------------------------------> loading template
 function getLoadingTemplate(message) {
     return getLoadingHTML(message);
 }
 
-//--------------------------------------------------------------------------------------> error template
 function getErrorTemplate(message) {
     return getErrorHTML(message);
 }
 
-//--------------------------------------------------------------------------------------> search info template  
 function getSearchInfoTemplate(resultCount, searchTerm, generationText) {
     return getSearchInfoHTML(resultCount, searchTerm, generationText);
 }
 
-//--------------------------------------------------------------------------------------> search suggestion template
 function getSearchSuggestionTemplate(suggestion) {
     return getSearchSuggestionHTML(suggestion);
 }
 
-//--------------------------------------------------------------------------------------> loading overlay template
 function getLoadingOverlayTemplate(message) {
     return getLoadingOverlayHTML(message);
 }
 
-//--------------------------------------------------------------------------------------> compact generation button template
 function getCompactGenerationTemplate(generationId) {
     return getCompactGenerationButtonHTML(generationId);
 }
 
-//--------------------------------------------------------------------------------------> compact generations container template
 function getCompactGenerationsTemplate(generations) {
     let allButtonHTML = getCompactAllGenerationsButtonHTML();
     let compactHTML = getCompactGenerationsRowHTML(allButtonHTML);
@@ -179,7 +159,6 @@ function getCompactGenerationsTemplate(generations) {
     return compactHTML;
 }
 
-//--------------------------------------------------------------------------------------> prepare compact generations rows
 function prepareCompactGenerationsRows(generations) {
     let rowsHTML = '';
     let currentRowHTML = '';

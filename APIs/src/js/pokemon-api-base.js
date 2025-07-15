@@ -1,8 +1,6 @@
-//--------------------------------------------------------------------------------------> pokemon-api-base.js
 const POKEAPI_URL = "https://pokeapi.co/api/v2/";
 const SPRITES_URL = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";
 
-//--------------------------------------------------------------------------------------> extract ID from pokemonAPI
 function extractIdFromUrl(url) {
     let urlParts = url.split('/');
     let totalParts = urlParts.length;
@@ -13,7 +11,6 @@ function extractIdFromUrl(url) {
     return pokemonId;
 }
 
-//--------------------------------------------------------------------------------------> get single pokemon
 async function getPokemon(pokemonId) {
     try{
         logApiCall("pokemon/" + pokemonId);
@@ -30,7 +27,6 @@ async function getPokemon(pokemonId) {
     }
 }
 
-//--------------------------------------------------------------------------------------> get Pokemon list
 async function getPokemonList(limit = 20, offset = 0) {
     try{
         let endpoint = `pokemon?limit=${limit}&offset=${offset}`;
@@ -48,7 +44,6 @@ async function getPokemonList(limit = 20, offset = 0) {
     }
 }
 
-//--------------------------------------------------------------------------------------> get multiple pokemon
 async function getMultiplePokemon(pokemonIds) {
     try{
         logApiMessage("loading multiple pokemon: " + pokemonIds.length + " total");
@@ -81,7 +76,6 @@ async function getMultiplePokemon(pokemonIds) {
     }
 }
 
-//--------------------------------------------------------------------------------------> get pokemon sprites
 function getPokemonSprites(pokemonId) {
     return {
         front: `${SPRITES_URL}${pokemonId}.png`,
@@ -93,7 +87,6 @@ function getPokemonSprites(pokemonId) {
     };
 }
 
-//--------------------------------------------------------------------------------------> get pokemon types
 async function getPokemonTypes() {
     try {
         logApiCall("types");
@@ -110,7 +103,6 @@ async function getPokemonTypes() {
     }
 }
 
-//--------------------------------------------------------------------------------------> search pokemon
 async function searchPokemon(searchTerm) {
     try {
         logSearchStart(searchTerm, "single");

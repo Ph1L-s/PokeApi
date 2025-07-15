@@ -1,30 +1,25 @@
-/* render.js */
-
-//--------------------------------------------------------------------------------------> render pokemon stats
 function renderPokemonStats(pokemon) {
     let container = document.getElementById('pokemon_stats');
     if (!container) {
-        logStatsContainerNotFound();
+        logErrorMessage("stats container not found");
         return;
     }
     
     setupStatsContainer(container, pokemon);
-    logStatsRenderSuccess(pokemon.name);
+    logRenderSuccess("pokemon stats for " + pokemon.name);
 }
 
-//--------------------------------------------------------------------------------------> render generations in sidebar
 function renderGenerations(generations) {
     let container = document.getElementById('generations_container');
     if (!container) {
-        logGenerationsContainerNotFound();
+        logErrorMessage("generations container not found");
         return;
     }
     
     insertGenerationsIntoContainer(container, generations);
-    logGenerationsRenderSuccess(generations.length);
+    logRenderSuccess("generations", generations.length);
 }
 
-//--------------------------------------------------------------------------------------> render pokemon grid with limits
 function renderPokemonGridWithLimiter(pokemonList, page) {
     let container = findPokemonContainerElement();
     if (!container) {
@@ -41,7 +36,6 @@ function renderPokemonGridWithLimiter(pokemonList, page) {
     renderPokemonGridContent(container, pokemonList, page);
 }
 
-//--------------------------------------------------------------------------------------> render search results
 function renderSearchResults(pokemonList) {
     let container = findPokemonContainerElement();
     if (!container) {
@@ -58,7 +52,6 @@ function renderSearchResults(pokemonList) {
     renderSearchResultsContent(container, pokemonList);
 }
 
-//--------------------------------------------------------------------------------------> render no search results
 function renderNoSearchResults() {
     let container = findPokemonContainerElement();
     if (container) {
@@ -66,22 +59,21 @@ function renderNoSearchResults() {
     }
     
     updateContentHeaderForSearch(0);
-    logNoSearchResultsRender();
+    logRenderSuccess("no search results for '" + currentSearchTerm + "'");
 }
 
-//--------------------------------------------------------------------------------------> update content header for search
 function updateContentHeaderForSearch(resultCount) {
     let contentHeader = findContentHeaderElement();
     
     if (contentHeader) {
         updateContentHeaderText(contentHeader, resultCount);
     } else {
-        logContentHeaderError();
+        logErrorMessage("Content header element not found - add id='content_header_title' to your h2 or ensure .content_header class exists");
     }
 }
 
-//--------------------------------------------------------------------------------------> Add image loading effects
 function addImageLoadingEffects() {
     let imageCount = addImageLoadingEffectsToContainer();
-    logImageLoadingEffects(imageCount);
+    logRenderMessage("Adding loading effects to " + imageCount + " pokemon images");
+    logRenderMessage("Loading effects added to all pokemon images");
 }

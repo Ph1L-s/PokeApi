@@ -1,6 +1,3 @@
-//--------------------------------------------------------------------------------------> pokemon-details.js
-
-//--------------------------------------------------------------------------------------> parse evolution chain data
 function parseEvolutionChain(evolutionChain) {
     
     if (!evolutionChain || !evolutionChain.chain) {
@@ -49,7 +46,6 @@ function parseEvolutionChain(evolutionChain) {
     return evolutions;
 }
 
-//--------------------------------------------------------------------------------------> get pokemon with details
 async function getPokemonWithDetails(pokemonId) {
     try {
         logPokemonDetailsStart(pokemonId);

@@ -1,6 +1,3 @@
-//--------------------------------------------------------------------------------------> pokemon-init.js
-
-//--------------------------------------------------------------------------------------> get first pokemon test 
 async function getFirstPokemon() {
     try {
         logApiMessage("loading first 20 pokemon for testing");
@@ -18,7 +15,6 @@ async function getFirstPokemon() {
     }
 }
 
-//--------------------------------------------------------------------------------------> initialize Pokedex
 async function initPokedex() {
     logAppMessage("initializing pokedex");
     
@@ -41,7 +37,6 @@ async function initPokedex() {
     }
 }
 
-//--------------------------------------------------------------------------------------> initialize app with specific generation
 async function initPokedexWithGeneration(generationId) {
     logAppMessage("initializing pokedex with generation: " + generationId);
     
@@ -65,7 +60,6 @@ async function initPokedexWithGeneration(generationId) {
     }
 }
 
-//--------------------------------------------------------------------------------------> preload essential data
 async function preloadEssentialData() {
     try {
         logAppMessage("preloading essential data");

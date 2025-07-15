@@ -1,6 +1,3 @@
-/* sidebar.css */
-
-/* Sidebar Styles */
 .sidebar {
     background-color: #ffffff;
     padding: 20px;
@@ -22,7 +19,6 @@
     background: linear-gradient(to right, #ffffff 95%, #f8f8f8 100%);
 }
 
-/* Generation Sections */
 .generation_section {
     margin-bottom: 30px;
 }

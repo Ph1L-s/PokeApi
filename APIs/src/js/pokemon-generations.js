@@ -1,6 +1,3 @@
-//--------------------------------------------------------------------------------------> pokemon-generations.js
-
-//--------------------------------------------------------------------------------------> get all generations
 async function getAllGenerations() {
     try {
         logApiCall("generations");
@@ -18,7 +15,6 @@ async function getAllGenerations() {
     }
 }
 
-//--------------------------------------------------------------------------------------> get generation with Pokemon
 async function getGenerationWithPokemon(generationId) {
     try {
         logApiCall("generation/" + generationId);
@@ -35,7 +31,6 @@ async function getGenerationWithPokemon(generationId) {
     }
 }
 
-//--------------------------------------------------------------------------------------> get all pokemon overview
 async function getAllPokemonOverview() {
     try {
         logApiMessage("loading all pokemon overview");
@@ -83,7 +78,6 @@ async function getAllPokemonOverview() {
     }
 }
 
-//--------------------------------------------------------------------------------------> get pokemon by generation range
 async function getPokemonByGenerationRange(startGeneration, endGeneration) {
     try {
         logApiMessage("loading pokemon from generation " + startGeneration + " to " + endGeneration);

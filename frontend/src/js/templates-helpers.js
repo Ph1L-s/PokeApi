@@ -1,11 +1,7 @@
-/* templates-helpers.js*/
-
-//--------------------------------------------------------------------------------------> Type Badge HTML Function
 function getTypeBadgeHTML(typeName) {
     return `<span class="type_badge type_${typeName}">${typeName}</span>`;
 }
 
-//--------------------------------------------------------------------------------------> pokemon card HTMLs
 function getPokemonCardHTML(pokemon, sprites, typeBadgesHTML, dataAttributes) {
     return `
         <div class="pokemon_card_mini" ${dataAttributes} onclick="showPokemonDetails(${pokemon.id})">
@@ -24,7 +20,6 @@ function getPokemonCardHTML(pokemon, sprites, typeBadgesHTML, dataAttributes) {
     `;
 }
 
-//--------------------------------------------------------------------------------------> generation Button HTML
 function getGenerationButtonHTML(generationId) {
     return `
         <button class="generation_button" onclick="loadGeneration(${generationId})">
@@ -33,7 +28,6 @@ function getGenerationButtonHTML(generationId) {
     `;
 }
 
-//--------------------------------------------------------------------------------------> generations container HTML
 function getGenerationsContainerHTML(normalGenerationsHTML) {
     return `
         <button class="generation_button generation_all" onclick="loadAllGenerations()">
@@ -43,12 +37,10 @@ function getGenerationsContainerHTML(normalGenerationsHTML) {
     `;
 }
 
-//--------------------------------------------------------------------------------------> no Pokemon HTML
 function getNoPokemonHTML() {
     return '<div class="no_pokemon">No pokemon loaded</div>';
 }
 
-//--------------------------------------------------------------------------------------> no search results HTML
 function getNoSearchResultsHTML() { 
     return `
         <div class="no_search_results">
@@ -65,7 +57,6 @@ function getNoSearchResultsHTML() {
     `;
 }
 
-//--------------------------------------------------------------------------------------> limiter controls HTML
 function getLimiterHTML(currentPage, totalPages, startPokemon, endPokemon, totalPokemon, previousClass, nextClass, previousDisabled, nextDisabled) {
     return `
         <div class="Limiter_container">
@@ -88,17 +79,14 @@ function getLimiterHTML(currentPage, totalPages, startPokemon, endPokemon, total
             </div>`;
 }
 
-//--------------------------------------------------------------------------------------> no evolution HTML
 function getNoEvolutionHTML() {
     return '<div class="evolution_chain"><p class="no_evolution">No evolutions available</p></div>';
 }
 
-//--------------------------------------------------------------------------------------> Evolution chain container HTML
 function getEvolutionChainHTML(evolutionStagesHTML) {
     return `<div class="evolution_chain">${evolutionStagesHTML}</div>`;
 }
 
-//--------------------------------------------------------------------------------------> Evolution stage HTML
 function getEvolutionStageHTML(evo, sprites) {
     return `
         <div class="evolution_stage">
@@ -111,12 +99,10 @@ function getEvolutionStageHTML(evo, sprites) {
         </div>`;
 }
 
-//--------------------------------------------------------------------------------------> Evolution arrow HTML
 function getEvolutionArrowHTML() {
     return '<div class="evolution_arrow">→</div>';
 }
 
-//--------------------------------------------------------------------------------------> Pokemon stats HTML 
 function getPokemonStatsHTML(pokemon, sprites, typeBadgesHTML, abilityString, pokemonHeight, pokemonWeight, evolutionChainHTML, statsHTML, dataAttributes) {
     return `
         <div class="stats_overlay" onclick="closeStats()">
@@ -154,8 +140,7 @@ function getPokemonStatsHTML(pokemon, sprites, typeBadgesHTML, abilityString, po
         </div>
     `;
 }
-
-//--------------------------------------------------------------------------------------> stats modal content HTML 
+ 
 function getStatsModalContentHTML(pokemon, sprites, typeBadgesHTML, abilityString, pokemonHeight, pokemonWeight, evolutionChain) {
     return `
         <button class="stats_close" onclick="closeStats()">×</button>
@@ -191,7 +176,6 @@ function getStatsModalContentHTML(pokemon, sprites, typeBadgesHTML, abilityStrin
     `;
 }
 
-//--------------------------------------------------------------------------------------> stat row HTML
 function getStatRowHTML(statName, statValue, percentage) {
     return `
         <div class="stat_row">
@@ -204,17 +188,14 @@ function getStatRowHTML(statName, statValue, percentage) {
     `;
 }
 
-//--------------------------------------------------------------------------------------> loading HTML
 function getLoadingHTML(message) {
     return `<div class="loading_message">${message}</div>`;
 }
 
-//--------------------------------------------------------------------------------------> error HTML
 function getErrorHTML(message) {
     return `<div class="error_message">${message}</div>`;
 }
 
-//--------------------------------------------------------------------------------------> search info HTML
 function getSearchInfoHTML(resultCount, searchTerm, generationText) {
     return `
         <div class="search_info">
@@ -225,7 +206,6 @@ function getSearchInfoHTML(resultCount, searchTerm, generationText) {
     `;
 }
 
-//--------------------------------------------------------------------------------------> search suggestion HTML
 function getSearchSuggestionHTML(suggestion) {
     return `
         <div class="search_suggestion" onclick="selectSearchSuggestion('${suggestion}')">
@@ -234,7 +214,6 @@ function getSearchSuggestionHTML(suggestion) {
     `;
 }
 
-//--------------------------------------------------------------------------------------> loading overlay HTML
 function getLoadingOverlayHTML(message) {
     return `
         <div class="loading_spinner"></div>
@@ -242,17 +221,14 @@ function getLoadingOverlayHTML(message) {
     `;
 }
 
-//--------------------------------------------------------------------------------------> evolution loading HTML
 function getEvolutionLoadingHTML() {
     return '<div class="evolution_loading">Loading evolution...</div>';
 }
 
-//--------------------------------------------------------------------------------------> evolution error HTML
 function getEvolutionErrorHTML() {
     return '<div class="evolution_error">Error loading evolution</div>';
 }
 
-//--------------------------------------------------------------------------------------> compact generation button HTML
 function getCompactGenerationButtonHTML(generationId) {
     return `
         <button class="generation_button_compact" onclick="loadGeneration(${generationId})">
@@ -261,7 +237,6 @@ function getCompactGenerationButtonHTML(generationId) {
     `;
 }
 
-//--------------------------------------------------------------------------------------> compact all generations button HTML
 function getCompactAllGenerationsButtonHTML() {
     return `
         <button class="generation_button_compact generation_all" onclick="loadAllGenerations()">
@@ -270,7 +245,6 @@ function getCompactAllGenerationsButtonHTML() {
     `;
 }
 
-//--------------------------------------------------------------------------------------> compact generations row HTML
 function getCompactGenerationsRowHTML(buttonsHTML) {
     return `
         <div class="generations_row">

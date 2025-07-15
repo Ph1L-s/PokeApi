@@ -1,229 +1,107 @@
 # PokéDex Web App
 
-A modern, responsive PokéDex application built with vanilla JavaScript and the PokéAPI. Browse Pokémon by generations with real-time search and detailed evolution information.
+A responsive PokéDex application built with vanilla JavaScript and the PokéAPI for browsing Pokémon across generations with real-time search functionality.
 
 ## Features
 
-- **🔍 Real-time Search** - Search Pokémon by name or Pokédex number with instant results
-- **📱 Generation Navigation** - Browse Pokémon by their original generations (1-9) plus "All Generations" view
-- **📊 Enhanced Pagination** - Efficient browsing with 50 Pokémon per page
-- **🎯 Responsive Design** - Optimized for desktop, tablet, and mobile devices
-- **🃏 Interactive Pokemon Cards** - Clean mini-card layout displaying sprites, names, and types
-- **📈 Detailed Stats Modal** - Click any Pokémon to view comprehensive information:
-  - Base stats with visual progress bars
-  - Height, weight, abilities, and types
-  - Complete evolution chain visualization
-  - Multiple sprite views (front, back, shiny, artwork)
-- **⚡ Performance Optimized** - Fast loading with parallel API calls and smart caching
-- **🎨 Smooth Animations** - Hover effects, loading states, and seamless transitions
+- Real-time search by name or Pokédex number
+- Generation-based navigation (1-9 plus "All Generations")
+- Detailed Pokémon information with stats and evolution chains
+- Responsive design for desktop, tablet, and mobile
+- Interactive cards with type-based styling
+- Efficient pagination system
 
-## Live Demo
+## Browser Compatibility
 
-Open `frontend/src/html/main.html` in your browser to start exploring!
+- Chrome 55+
+- Firefox 52+
+- Safari 10.1+
+- Edge 79+
 
-## Tech Stack
-
-- **Frontend**: Vanilla JavaScript (ES6+), HTML5, CSS3
-- **API**: [PokéAPI](https://pokeapi.co/) - RESTful Pokémon data
-- **Architecture**: Modular file structure with separation of concerns
-- **Performance**: Promise.all for parallel requests, optimized data processing
-- **Responsive**: Mobile-first design with CSS Grid and Flexbox
-
-## New in Version 2.0
-
-### 🚀 Major Features Added
-- **Real-time Search**: Instant Pokémon search by name or Pokédex number
-- **Enhanced Pagination**: Increased from 30 to 50 Pokémon per page
-- **All Generations View**: Browse all 1000+ Pokémon across generations
-- **Improved Performance**: Parallel API calls and optimized data loading
-
-### 🔧 Technical Improvements
-- **Modular Architecture**: Clean separation into orchestration and helper files
-- **Modern JavaScript**: Full async/await implementation replacing Promise chains
-- **Better Error Handling**: Comprehensive try/catch with user-friendly messages
-- **Template Separation**: HTML generation isolated from business logic
+Requires ES6+ support for async/await and template literals.
 
 ## Project Structure
 
 ```
-├── APIs/
-│   └── src/js/
-│       ├── pokemon-api-base.js      # Core API calls (getPokemon, getMultiple)
-│       ├── pokemon-details.js       # Enhanced details & evolution processing
-│       ├── pokemon-generations.js   # Generation management & data aggregation
-│       └── pokemon-init.js          # App initialization & data preloading
-├── frontend/
-│   ├── src/
-│   │   ├── html/
-│   │   │   └── main.html            # Main application page
-│   │   ├── js/
-│   │   │   ├── script.js            # App orchestration & main functions
-│   │   │   ├── script-helpers.js    # Business logic & data processing
-│   │   │   ├── render.js            # High-level UI rendering
-│   │   │   ├── render-helpers.js    # DOM manipulation utilities
-│   │   │   ├── loader.js            # Loading state coordination
-│   │   │   ├── loader-helpers.js    # Loading DOM utilities
-│   │   │   ├── template-functions.js # Template wrapper functions
-│   │   │   └── templates-html.js    # Pure HTML template generation
-│   │   └── css/
-│   │       ├── main.css             # Layout and structure
-│   │       ├── header.css           # Header with search functionality
-│   │       ├── sidebar.css          # Generation navigation
-│   │       ├── searchbar.css        # Search input styling
-│   │       ├── cards.css            # Detail modal styling
-│   │       ├── mini-cards.css       # Pokémon card grid
-│   │       ├── evolution.css        # Evolution chain visualization
-│   │       ├── footer.css           # Footer component
-│   │       ├── assets.css           # UI components & pagination
-│   │       ├── fonts.css            # Typography system
-│   │       └── responsive.css       # Mobile responsiveness
-└── resources/
-    ├── icons/                       # App icons and favicons
-    └── images/                      # Additional assets
+├── APIs/src/js/
+│   ├── pokemon-api-base.js      # Core API calls and data fetching
+│   ├── pokemon-details.js       # Evolution processing and enhanced details
+│   ├── pokemon-generations.js   # Generation management
+│   └── pokemon-init.js          # Application initialization
+├── frontend/src/
+│   ├── html/main.html           # Main application
+│   ├── js/
+│   │   ├── script.js            # Main application orchestration
+│   │   ├── script-helpers.js    # Business logic and data processing
+│   │   ├── render.js            # UI rendering coordination
+│   │   ├── render-helpers.js    # DOM manipulation utilities
+│   │   ├── template.js          # Template logic and data preparation
+│   │   ├── template-helpers.js  # Pure HTML template generation
+│   │   ├── loader.js            # Loading state management
+│   │   ├── loader-helpers.js    # Loading DOM utilities
+│   │   ├── logger.js            # Application logging system
+│   │   └── logger-helpers.js    # Logging configuration and utilities
+│   └── css/                     # Modular styling system
+└── resources/                   # Icons and assets
 ```
 
-## Core Functionality
+## Architecture
 
-### 🔍 Search System
-- **Real-time Search**: Instant filtering as you type
-- **Dual Search Modes**: Search by Pokémon name or Pokédex number
-- **Generation Scope**: Search within current generation or all generations
-- **Keyboard Support**: Enter to search, Escape to clear
-- **Smart Debouncing**: Optimized to prevent excessive API calls
+### Code Organization
+The application follows a modular architecture with clear separation of concerns:
 
-### 🗂️ API Integration
-- **Parallel Processing**: Multiple Pokémon loaded simultaneously using Promise.all
-- **Smart Caching**: Evolution chains and species data efficiently cached
-- **Error Recovery**: Graceful fallbacks for failed requests
-- **Data Validation**: Comprehensive error handling with user feedback
-- **Performance Optimization**: Minimized API calls with intelligent batching
+- **Orchestration Layer** (script.js, render.js): Main application flow and high-level UI coordination
+- **Helper Layer** (script-helpers.js, render-helpers.js): Business logic and DOM manipulation utilities  
+- **Template Layer** (template.js, template-helpers.js): Logic-driven template preparation and pure HTML generation
+- **API Layer** (pokemon-api-base.js, pokemon-details.js): Data fetching and processing
+- **Utility Layer** (loader.js, logger.js): Loading states and application logging
 
-### 🎨 User Interface
-- **Generation Navigation**: Seamless switching between Pokémon generations
-- **Interactive Grid**: Responsive cards with hover effects and type indicators
-- **Detailed Modals**: Comprehensive Pokémon information with evolution trees
-- **Smart Pagination**: Navigate through large datasets with page controls
-- **Loading States**: Smooth transitions with loading overlays and spinners
+### Function Design
+All functions are limited to maximum 20 lines for maintainability and follow the single responsibility principle.
 
-### ⚡ Performance Features
-- **Efficient Pagination**: 50 Pokémon per page for optimal loading
-- **Lazy Evolution Loading**: Evolution chains loaded on-demand
-- **Optimized Rendering**: Template-based HTML generation
-- **Image Fallbacks**: Multiple sprite sources with error handling
-- **Memory Management**: Efficient data structures and cleanup
+## Logging System
 
-## Architecture Highlights
+The application includes a comprehensive logging system for development and debugging:
 
-### 📁 Modular File Structure
+### Logger Configuration
+- **Granular Control**: Individual log categories can be enabled/disabled
+- **Categories**: API calls, rendering, pagination, search, generation loading, evolution processing, errors
+- **Runtime Toggle**: Logging can be toggled on/off through the UI without restart
+
+### Logger Functions
 ```javascript
-// App Orchestration Layer
-script.js           → Main application flow and user interactions
-render.js           → High-level UI coordination and rendering
+// Available logging categories
+apiLogs, renderLogs, pageLogs, generationLogs, searchLogs, 
+pokemonLogs, loadingLogs, paginationLogs, evolutionLogs, 
+appLogs, errorLogs
 
-// Helper/Utility Layer  
-script-helpers.js   → Business logic and data processing
-render-helpers.js   → DOM manipulation and utility functions
-loader-helpers.js   → Loading state management utilities
-
-// Template Layer
-template-functions.js → Template coordination and data binding
-templates-html.js     → Pure HTML template generation
-
-// API Layer
-pokemon-api-base.js     → Core HTTP requests and data fetching
-pokemon-details.js      → Enhanced Pokémon details and evolution
-pokemon-generations.js  → Generation management and aggregation
-pokemon-init.js         → Application bootstrap and initialization
+// Control functions
+enableAllLogs(), disableAllLogs(), enableImportantLogs(), enableOnlyErrors()
 ```
 
-### 🔧 Design Patterns
-- **Separation of Concerns**: Clear boundaries between data, logic, and presentation
-- **Template Method Pattern**: Coordinated template generation with reusable components
-- **Helper Pattern**: Utility functions for common operations
-- **Async/Await Pattern**: Modern asynchronous programming throughout
-
-## Browser Compatibility
-
-- **Chrome**: 55+ ✅
-- **Firefox**: 52+ ✅
-- **Safari**: 10.1+ ✅
-- **Edge**: 79+ ✅
-
-*Requires ES6+ support for async/await, template literals, and destructuring*
-
-## Performance Metrics
-
-- **Initial Load**: ~2-3 seconds for first generation
-- **Search Response**: <300ms average response time
-- **Page Navigation**: <1 second between generations
-- **Modal Loading**: <500ms for detailed Pokémon information
-- **Memory Usage**: Optimized for mobile devices
-
-## Development Features
-
-### 🛠️ Code Quality
-- **Beginner-Friendly**: Clear, readable code with extensive logging
-- **Consistent Style**: Uniform naming conventions and structure
-- **Error Handling**: Comprehensive try/catch with user feedback
-- **Documentation**: Detailed comments and function descriptions
-
-### 🧪 Debugging Support
-- **Console Logging**: Detailed operation logs for development
-- **Error Messages**: Clear, actionable error descriptions
-- **State Tracking**: Visible application state changes
-- **Performance Monitoring**: Loading time measurements
-
-## API Usage
-
-### Data Sources
-- **Core Pokémon Data**: Basic stats, sprites, types, abilities
-- **Species Information**: Flavor text, evolution chains, habitat
-- **Generation Data**: Pokémon grouped by original game releases
-- **Evolution Chains**: Complete evolution trees with trigger conditions
-
-### Request Optimization
-- **Batch Loading**: Multiple Pokémon fetched in parallel
-- **Smart Caching**: Species and evolution data cached per session
-- **Error Recovery**: Automatic retries for failed requests
-- **Rate Limiting**: Respectful API usage patterns
-
-## Current Status
-
-**Version**: 2.0.0 - Major Architecture Refactor  
-**Pokémon Count**: 1000+ across 9 generations  
-**Search Performance**: <300ms average response time  
-**Mobile Support**: Full responsive design  
-**Browser Compatibility**: Modern browsers (ES6+)
-
-## Recent Updates (v2.0.0)
-
-### ✅ Completed Features
-- ✅ Real-time Pokémon search functionality
-- ✅ Modular code architecture with helper files
-- ✅ Enhanced pagination (50 Pokémon per page)
-- ✅ "All Generations" browsing mode
-- ✅ Performance optimization with parallel API calls
-- ✅ Modern async/await implementation
-- ✅ Template separation for better maintainability
-- ✅ Comprehensive error handling and user feedback
-
-### 🚀 Future Enhancements
-- 🔄 Type-based filtering system
-- 🎨 Advanced UI/UX improvements
-- 📊 Pokémon comparison tools
-- 💾 Local storage for favorites
-- 🌙 Dark/light theme toggle
-- 📱 Progressive Web App (PWA) features
-- 🔄 Advanced search filters (stats, abilities, etc.)
+### Development Features
+- Detailed operation tracking for API calls
+- Performance monitoring with timing logs
+- Error handling with context information
+- State change notifications
+- Search operation logging with result counts
 
 ## Getting Started
 
-1. **Clone or download** the repository
-2. **Open** `frontend/src/html/main.html` in a modern browser
-3. **Start exploring** - search for your favorite Pokémon or browse by generation!
+1. Open `frontend/src/html/main.html` in a modern browser
+2. Use the generation sidebar to browse Pokémon by generation
+3. Search for specific Pokémon using the search bar
+4. Click any Pokémon card for detailed information
 
-No build process required - pure vanilla JavaScript for maximum compatibility.
+No build process required - runs directly in the browser with vanilla JavaScript.
+
+## Tech Stack
+
+- Frontend: Vanilla JavaScript (ES6+), HTML5, CSS3
+- API: PokéAPI (https://pokeapi.co/)
+- Architecture: Modular file structure with helper pattern
+- Performance: Promise.all for parallel requests, optimized pagination
 
 ---
 
-*Powered by [PokéAPI](https://pokeapi.co/) - The ultimate Pokémon data source*  
+Powered by PokéAPI - The RESTful Pokémon API

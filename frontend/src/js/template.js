@@ -10,8 +10,15 @@ function getPokemonCardTemplate(pokemon) {
     }
     
     let typeBadgesHTML = typeBadges.join(' ');
+    let primaryType = pokemon.types[0].type.name;
+    let secondaryType = pokemon.types.length > 1 ? pokemon.types[1].type.name : null;
     
-    return getPokemonCardHTML(pokemon, sprites, typeBadgesHTML);
+    let dataAttributes = `data-primary-type="${primaryType}"`;
+    if (secondaryType) {
+        dataAttributes += ` data-secondary-type="${secondaryType}"`;
+    }
+    
+    return getPokemonCardHTML(pokemon, sprites, typeBadgesHTML, dataAttributes);
 }
 
 //--------------------------------------------------------------------------------------> Pokemon stats template 
@@ -29,13 +36,23 @@ function getPokemonStatsTemplate(pokemon) {
         abilities.push(pokemon.abilities[abilityIndex].ability.name);
     }
     
+    return preparePokemonStatsData(pokemon, sprites, typeBadges, abilities);
+}
+
+//--------------------------------------------------------------------------------------> prepare pokemon stats data
+function preparePokemonStatsData(pokemon, sprites, typeBadges, abilities) {
     let typeBadgesHTML = typeBadges.join(' ');
     let abilityString = abilities.join(', ');
     let pokemonHeight = pokemon.height / 10;
     let pokemonWeight = pokemon.weight / 10;
-    const evolutionChain = parseEvolutionChain(pokemon.evolution_chain);
+    let evolutionChain = parseEvolutionChain(pokemon.evolution_chain);
+    let primaryType = pokemon.types[0].type.name;
+    let evolutionChainHTML = getEvolutionChainTemplate(evolutionChain);
+    let statsHTML = getStatsTemplate(pokemon.stats);
     
-    return getPokemonStatsHTML(pokemon, sprites, typeBadgesHTML, abilityString, pokemonHeight, pokemonWeight, evolutionChain);
+    let dataAttributes = `data-primary-type="${primaryType}"`;
+    
+    return getPokemonStatsHTML(pokemon, sprites, typeBadgesHTML, abilityString, pokemonHeight, pokemonWeight, evolutionChainHTML, statsHTML, dataAttributes);
 }
 
 //--------------------------------------------------------------------------------------> generation Buttontemplate
@@ -63,7 +80,12 @@ function getLimiterTemplate(currentPage, totalPages, totalPokemon) {
     let startPokemon = (currentPage - 1) * pokemonPerPage + 1;
     let endPokemon = Math.min(currentPage * pokemonPerPage, totalPokemon);
     
-    return getLimiterHTML(currentPage, totalPages, startPokemon, endPokemon, totalPokemon);
+    let previousDisabled = currentPage === 1;
+    let nextDisabled = currentPage === totalPages;
+    let previousClass = previousDisabled ? 'disabled' : '';
+    let nextClass = nextDisabled ? 'disabled' : '';
+    
+    return getLimiterHTML(currentPage, totalPages, startPokemon, endPokemon, totalPokemon, previousClass, nextClass, previousDisabled, nextDisabled);
 }
 
 //--------------------------------------------------------------------------------------> Evolution chaintemplate  
@@ -72,7 +94,27 @@ function getEvolutionChainTemplate(evolutionChain) {
         return getNoEvolutionHTML();
     }
     
-    return getEvolutionChainHTML(evolutionChain);
+    let evolutionStagesHTML = prepareEvolutionStages(evolutionChain);
+    return getEvolutionChainHTML(evolutionStagesHTML);
+}
+
+//--------------------------------------------------------------------------------------> prepare evolution stages
+function prepareEvolutionStages(evolutionChain) {
+    let evolutionStagesHTML = '';
+    
+    for (let evolutionChainIndex = 0; evolutionChainIndex < evolutionChain.length; evolutionChainIndex++) {
+        const evo = evolutionChain[evolutionChainIndex];
+        if (!evo.id) continue;
+        
+        const sprites = getPokemonSprites(evo.id);
+        evolutionStagesHTML += getEvolutionStageHTML(evo, sprites);
+        
+        if (evolutionChainIndex < evolutionChain.length - 1) {
+            evolutionStagesHTML += getEvolutionArrowHTML();
+        }
+    }
+    
+    return evolutionStagesHTML;
 }
 
 //--------------------------------------------------------------------------------------> Base stats template
@@ -83,8 +125,8 @@ function getStatsTemplate(stats) {
         let stat = stats[statIndex];
         let statName = stat.stat.name;
         let statValue = stat.base_stat;
-        
         let percentage = Math.min((statValue / 255) * 100, 100);
+        
         statsHTML += getStatTemplate(statName, statValue, percentage);
     }
     
@@ -128,12 +170,20 @@ function getCompactGenerationTemplate(generationId) {
 
 //--------------------------------------------------------------------------------------> compact generations container template
 function getCompactGenerationsTemplate(generations) {
-    let compactHTML = '';
-    
     let allButtonHTML = getCompactAllGenerationsButtonHTML();
-    compactHTML += getCompactGenerationsRowHTML(allButtonHTML);
+    let compactHTML = getCompactGenerationsRowHTML(allButtonHTML);
 
+    let generationRowsHTML = prepareCompactGenerationsRows(generations);
+    compactHTML += generationRowsHTML;
+    
+    return compactHTML;
+}
+
+//--------------------------------------------------------------------------------------> prepare compact generations rows
+function prepareCompactGenerationsRows(generations) {
+    let rowsHTML = '';
     let currentRowHTML = '';
+    
     for (let genIndex = 0; genIndex < generations.length; genIndex++) {
         let generationId = genIndex + 1;
         currentRowHTML += getCompactGenerationTemplate(generationId);
@@ -142,10 +192,10 @@ function getCompactGenerationsTemplate(generations) {
         let isLastGeneration = genIndex === generations.length - 1;
         
         if (rowIsFull || isLastGeneration) {
-            compactHTML += getCompactGenerationsRowHTML(currentRowHTML);
+            rowsHTML += getCompactGenerationsRowHTML(currentRowHTML);
             currentRowHTML = '';
         }
     }
     
-    return compactHTML;
+    return rowsHTML;
 }

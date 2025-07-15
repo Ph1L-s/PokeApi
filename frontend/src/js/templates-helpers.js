@@ -6,16 +6,7 @@ function getTypeBadgeHTML(typeName) {
 }
 
 //--------------------------------------------------------------------------------------> pokemon card HTMLs
-function getPokemonCardHTML(pokemon, sprites, typeBadgesHTML) {
-
-    let primaryType = pokemon.types[0].type.name;
-    let dataAttributes = `data-primary-type="${primaryType}"`;
-    
-    if (pokemon.types.length > 1) {
-        let secondaryType = pokemon.types[1].type.name;
-        dataAttributes += ` data-secondary-type="${secondaryType}"`;
-    }
-    
+function getPokemonCardHTML(pokemon, sprites, typeBadgesHTML, dataAttributes) {
     return `
         <div class="pokemon_card_mini" ${dataAttributes} onclick="showPokemonDetails(${pokemon.id})">
             <div class="pokemon_image_mini">
@@ -75,22 +66,22 @@ function getNoSearchResultsHTML() {
 }
 
 //--------------------------------------------------------------------------------------> limiter controls HTML
-function getLimiterHTML(currentPage, totalPages, startPokemon, endPokemon, totalPokemon) {
+function getLimiterHTML(currentPage, totalPages, startPokemon, endPokemon, totalPokemon, previousClass, nextClass, previousDisabled, nextDisabled) {
     return `
         <div class="Limiter_container">
             <div class="Limiter_info">
                 <span class="pokemon_count_Limiter">Showing ${startPokemon}-${endPokemon} of ${totalPokemon} Pokemon</span>
             </div>
             <div class="Limiter_controls">
-                <button class="Limiter_button ${currentPage === 1 ? 'disabled' : ''}" 
+                <button class="Limiter_button ${previousClass}" 
                         onclick="loadPreviousPage()" 
-                        ${currentPage === 1 ? 'disabled' : ''}>
+                        ${previousDisabled ? 'disabled' : ''}>
                     ← Previous
                 </button>
                 <span class="Limiter_current">Page ${currentPage} of ${totalPages}</span>
-                <button class="Limiter_button ${currentPage === totalPages ? 'disabled' : ''}" 
+                <button class="Limiter_button ${nextClass}" 
                         onclick="loadNextPage()" 
-                        ${currentPage === totalPages ? 'disabled' : ''}>
+                        ${nextDisabled ? 'disabled' : ''}>
                         Next →
                     </button>
                 </div>
@@ -102,39 +93,31 @@ function getNoEvolutionHTML() {
     return '<div class="evolution_chain"><p class="no_evolution">No evolutions available</p></div>';
 }
 
-//--------------------------------------------------------------------------------------> Evolution chain HTML
-function getEvolutionChainHTML(evolutionChain) {
-    let evolutionHTML = '<div class="evolution_chain">';
-    
-    for (let evolutionChainIndex = 0; evolutionChainIndex < evolutionChain.length; evolutionChainIndex++) {
-        const evo = evolutionChain[evolutionChainIndex];
-        if (!evo.id) continue;
-        
-        const sprites = getPokemonSprites(evo.id);
-        evolutionHTML += `
-            <div class="evolution_stage">
-                <img src="${sprites.front}" 
-                     alt="${evo.name}" 
-                     class="evolution_sprite"
-                     onclick="loadEvolutionPokemon(${evo.id})"
-                     onerror="this.src='${sprites.artwork}'">
-                <p class="evolution_name">${evo.name}</p>
-            </div>`;
-        
-        if (evolutionChainIndex < evolutionChain.length - 1) {
-            evolutionHTML += '<div class="evolution_arrow">→</div>';
-        }
-    }
-    evolutionHTML += '</div>';
-    return evolutionHTML;
+//--------------------------------------------------------------------------------------> Evolution chain container HTML
+function getEvolutionChainHTML(evolutionStagesHTML) {
+    return `<div class="evolution_chain">${evolutionStagesHTML}</div>`;
+}
+
+//--------------------------------------------------------------------------------------> Evolution stage HTML
+function getEvolutionStageHTML(evo, sprites) {
+    return `
+        <div class="evolution_stage">
+            <img src="${sprites.front}" 
+                 alt="${evo.name}" 
+                 class="evolution_sprite"
+                 onclick="loadEvolutionPokemon(${evo.id})"
+                 onerror="this.src='${sprites.artwork}'">
+            <p class="evolution_name">${evo.name}</p>
+        </div>`;
+}
+
+//--------------------------------------------------------------------------------------> Evolution arrow HTML
+function getEvolutionArrowHTML() {
+    return '<div class="evolution_arrow">→</div>';
 }
 
 //--------------------------------------------------------------------------------------> Pokemon stats HTML 
-function getPokemonStatsHTML(pokemon, sprites, typeBadgesHTML, abilityString, pokemonHeight, pokemonWeight, evolutionChain) {
-    // Primary Type für Stats Card
-    let primaryType = pokemon.types[0].type.name;
-    let dataAttributes = `data-primary-type="${primaryType}"`;
-    
+function getPokemonStatsHTML(pokemon, sprites, typeBadgesHTML, abilityString, pokemonHeight, pokemonWeight, evolutionChainHTML, statsHTML, dataAttributes) {
     return `
         <div class="stats_overlay" onclick="closeStats()">
             <div class="stats_content" ${dataAttributes} onclick="event.stopPropagation()">
@@ -147,8 +130,7 @@ function getPokemonStatsHTML(pokemon, sprites, typeBadgesHTML, abilityString, po
                 
                 <div class="stats_images">
                     <img src="${sprites.artwork}" alt="${pokemon.name}" class="main_image">
-                    
-                    ${getEvolutionChainTemplate(evolutionChain)}
+                    ${evolutionChainHTML}
                 </div>
                 
                 <div class="stats_info">
@@ -165,7 +147,7 @@ function getPokemonStatsHTML(pokemon, sprites, typeBadgesHTML, abilityString, po
                     
                     <div class="info_section">
                         <h3>Base Stats</h3>
-                        ${getStatsTemplate(pokemon.stats)}
+                        ${statsHTML}
                     </div>
                 </div>
             </div>

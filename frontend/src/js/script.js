@@ -13,33 +13,25 @@ let searchTimeout = null;
 
 //--------------------------------------------------------------------------------------> app Initialization
 async function init() {
-    logAppStart();
     showLoading("initializing pokédx...");
     
-    let statusElement = document.getElementById('logs_status');
-    if (statusElement && !logsEnabled) {
-        statusElement.classList.add('disabled');
-    }
+    setupLoggerStatus();
     
     try {
         pokedexData = await initPokedex();
         if (pokedexData) {
-            renderGenerations(pokedexData.generations);
-            initCompactSidebar();
-            await loadGeneration(1);
-            logAppReady();
+            await handleSuccessfulInit();
         } else {
             showError("failed to load pokedex data. please refresh the page.");
         }
     } catch (error) {
-        logAppError("app initialization failed", error);
+        handleInitError(error);
         showError("failed to initialize app. please refresh the page.");
     }
 }
 
 //--------------------------------------------------------------------------------------> load generation 
 async function loadGeneration(generationId) {
-    logGenerationStart(generationId);
     showLoadingOverlay("loading generation...");
     
     resetSearchOnGenerationChange();
@@ -47,21 +39,12 @@ async function loadGeneration(generationId) {
     try {
         let generationData = await getGenerationWithPokemon(generationId);
         if (generationData && generationData.pokemon_species) {
-            sortedGenerationData = processPokemonSpeciesData(generationData);
-            totalPokemonInGeneration = sortedGenerationData.pokemon_species.length;
-            currentGeneration = generationId;
-            currentPage = 1;
-            
-            logGenerationSuccess(generationId, totalPokemonInGeneration);
-            
-            await loadPokemonPage(1);
-            updateActiveGeneration(generationId);
-            updateSearchInfo();
+            await handleSuccessfulGenerationLoad(generationData, generationId);
         } else {
             showError("failed to load generation");
         }
     } catch (error) {
-        logGenerationError(generationId, error);
+        handleGenerationLoadError(generationId, error);
         showError("failed to load generation. please try again.");
     } finally {
         hideLoadingOverlay();
@@ -70,16 +53,13 @@ async function loadGeneration(generationId) {
 
 //--------------------------------------------------------------------------------------> load pokemon page 
 async function loadPokemonPage(page) {
-    logPageStart("pokemon page " + page);
-    
     try {
         let paginationData = calculatePagination(page, pokemonPerPage, sortedGenerationData.pokemon_species);
-        
         let pokemonList = await getMultiplePokemon(paginationData.pokemonIds);
         renderPokemonGridWithLimiter(pokemonList, page);
-        logPageSuccess("pokemon page " + page, pokemonList.length);
+        logPageLoadSuccess(page, pokemonList.length);
     } catch (error) {
-        logPageError("pokemon page " + page, error);
+        handlePageLoadError(page, error);
         showError("failed to load pokemon page. please try again.");
     }
 }
@@ -89,15 +69,7 @@ async function loadNextPage() {
     let totalPages = Math.ceil(totalPokemonInGeneration / pokemonPerPage);
     if (currentPage < totalPages) {
         currentPage++;
-        showLoadingOverlay("loading next page...");
-        logPaginationNext(currentPage, totalPages);
-        try {
-            await loadPokemonPage(currentPage);
-        } catch (error) {
-            logPageError("next page", error);
-            showError("failed to load next page. please try again.");
-            hideLoadingOverlay();
-        }
+        await handlePageLoad("next", currentPage, totalPages);
     }
 }
 
@@ -105,22 +77,13 @@ async function loadNextPage() {
 async function loadPreviousPage() {
     if (currentPage > 1) {
         currentPage--;
-        showLoadingOverlay("loading previous page...");
-        logPaginationPrevious(currentPage, Math.ceil(totalPokemonInGeneration / pokemonPerPage));
-        try {
-            await loadPokemonPage(currentPage);
-        } catch (error) {
-            logPageError("previous page", error);
-            showError("failed to load previous page. please try again.");
-            hideLoadingOverlay();
-        }
+        let totalPages = Math.ceil(totalPokemonInGeneration / pokemonPerPage);
+        await handlePageLoad("previous", currentPage, totalPages);
     }
 }
 
 //--------------------------------------------------------------------------------------> show pokemon details
 async function showPokemonDetails(pokemonId) {
-    logPokemonDetailsStart(pokemonId);
-    
     try {
         let pokemon = await getPokemonWithDetails(pokemonId);
         if (pokemon) {
@@ -129,34 +92,25 @@ async function showPokemonDetails(pokemonId) {
             showError("failed to load pokemon details");
         }
     } catch (error) {
-        logPokemonDetailsError(pokemonId, error);
+        handlePokemonDetailsError(pokemonId, error);
         showError("failed to load pokemon details. please try again.");
     }
 }
 
 //--------------------------------------------------------------------------------------> load all generations handler 
 async function loadAllGenerations() {
-    logGenerationStart('all');
     showLoadingOverlay("loading all generations...");
     
     resetSearchOnGenerationChange();
     try {
         let allPokemonData = await getAllPokemonOverview();
         if (allPokemonData && allPokemonData.allSpecies) {
-            sortedGenerationData = createAllGenerationsObject(allPokemonData.allSpecies);
-            totalPokemonInGeneration = allPokemonData.allSpecies.length;
-            currentGeneration = 'all';
-            currentPage = 1;
-            
-            logGenerationSuccess('all', totalPokemonInGeneration);
-            await loadPokemonPage(1);
-            updateActiveGeneration('all');
-            updateSearchInfo();
+            await handleSuccessfulAllGenerationsLoad(allPokemonData);
         } else {
             showError("failed to load all generations overview");
         }
     } catch (error) {
-        logGenerationError('all', error);
+        handleAllGenerationsLoadError(error);
         showError("failed to load all generations. please try again.");
     } finally {
         hideLoadingOverlay();
@@ -171,33 +125,21 @@ function handleSearchInput() {
     currentSearchTerm = searchTerm.toLowerCase();
 
     if (currentSearchTerm === "") {
-        logSearchMessage("Empty search - loading normal page");
-        loadPokemonPage(1);
+        handleEmptySearch();
     } else {
-        logSearchMessage("Starting search for: " + currentSearchTerm);
-        performSearch();
+        handleActiveSearch();
     }
 }
 
 //--------------------------------------------------------------------------------------> perform search
 async function performSearch() {
-    logSearchStart(currentSearchTerm, currentGeneration);
     showLoadingOverlay("searching pokemon...");
     
     try {
-        let allPokemonIds = getAllPokemonIdsFromGeneration();
-        let matchingPokemonIds = filterPokemonBySearchTerm(allPokemonIds);
-        
-        if (matchingPokemonIds.length > 0) {
-            logSearchSuccess(currentSearchTerm, matchingPokemonIds.length);
-            let pokemonList = await getMultiplePokemon(matchingPokemonIds);
-            renderSearchResults(pokemonList);
-        } else {
-            logSearchEmpty(currentSearchTerm);
-            renderNoSearchResults();
-        }
+        let searchResults = await executeSearch();
+        await handleSearchResults(searchResults);
     } catch (error) {
-        logSearchError(currentSearchTerm, error);
+        handleSearchError(error);
         showError("search failed. please try again.");
     } finally {
         hideLoadingOverlay();
@@ -207,14 +149,7 @@ async function performSearch() {
 //--------------------------------------------------------------------------------------> handle search keydown
 function handleSearchKeydown(event) {
     if (event.key === 'Enter') {
-        event.preventDefault();
-        let searchInput = document.getElementById('pokemon_search');
-        currentSearchTerm = searchInput.value.trim().toLowerCase();
-        if (currentSearchTerm === "") {
-            loadPokemonPage(1);
-        } else {
-            performSearch();
-        }
+        handleEnterKey(event);
     } else if (event.key === 'Escape') {
         clearSearch();
     }
@@ -226,7 +161,7 @@ function clearSearch() {
     searchInput.value = '';
     currentSearchTerm = "";
     
-    logSearchMessage("clearing search - loading normal page");
+    clearSearchWithLogging();
     loadPokemonPage(1);
 }
 
@@ -237,7 +172,7 @@ function resetSearchOnGenerationChange() {
         searchInput.value = '';
     }
     currentSearchTerm = "";
-    logSearchMessage("search reset due to generation change");
+    logSearchReset();
 }
 
 //--------------------------------------------------------------------------------------> update search info
@@ -247,10 +182,9 @@ function updateSearchInfo() {
 
 //--------------------------------------------------------------------------------------> update active generation button
 function updateActiveGeneration(generationId) {
-    logRenderMessage("updating active generation to: " + generationId);
-    
     removeActiveFromAllGenerationButtons();
     activateSpecificGenerationButton(generationId);
+    logActiveGenerationUpdate(generationId);
 }
 
 //--------------------------------------------------------------------------------------> close pokemon stats
@@ -266,7 +200,7 @@ function toggleSidebar() {
     let sidebar = document.getElementsByClassName('sidebar')[0];
     if (sidebar) {
         sidebar.classList.toggle('show');
-        logRenderMessage("Sidebar toggled");
+        logSidebarToggle();
     }
 }
 
@@ -275,7 +209,7 @@ function closeSidebar() {
     let sidebar = document.getElementsByClassName('sidebar')[0];
     if (sidebar) {
         sidebar.classList.remove('show');
-        logRenderMessage("Sidebar closed");
+        logSidebarClose();
     }
 }
 
@@ -284,54 +218,31 @@ function initCompactSidebar() {
     let compactContainer = document.getElementById('compact_generations');
     if (compactContainer && pokedexData && pokedexData.generations) {
         compactContainer.innerHTML = getCompactGenerationsTemplate(pokedexData.generations);
-        logRenderMessage("Compact sidebar initialized");
+        logCompactSidebarInit();
     }
 }
 
 //--------------------------------------------------------------------------------------> toggle logs
 function toggleLogs() {
     logsEnabled = !logsEnabled;
-
-    let statusElement = document.getElementById('logs_status');
-    if (statusElement) {
-        if (logsEnabled) {
-            statusElement.classList.remove('disabled');
-        } else {
-            statusElement.classList.add('disabled');
-        }
-    }
-    
-    apiLogs = logsEnabled;
-    renderLogs = logsEnabled;
-    pageLogs = logsEnabled;
-    generationLogs = logsEnabled;
-    searchLogs = logsEnabled;
-    pokemonLogs = logsEnabled;
-    loadingLogs = logsEnabled;
-    paginationLogs = logsEnabled;
-    evolutionLogs = logsEnabled;
-    appLogs = logsEnabled;
-    errorLogs = logsEnabled;
-    
-    logAppMessage('All logs ' + (logsEnabled ? 'enabled' : 'disabled'));
+    updateLoggerUI();
+    updateAllLogSettings();
+    logToggleLogsAction(logsEnabled);
 }
 
 //--------------------------------------------------------------------------------------> load evolution pokemon in same modal
 async function loadEvolutionPokemon(pokemonId) {
-    logPokemonDetailsStart(pokemonId);
-    
     try {
         showEvolutionLoading();
-        
         let pokemon = await getPokemonWithDetails(pokemonId);
         if (pokemon) {
             updateStatsModal(pokemon);
-            logPokemonDetailsSuccess(pokemon.name, pokemonId);
+            logEvolutionPokemonSuccess(pokemon.name, pokemonId);
         } else {
             showEvolutionError("failed to load evolution pokemon");
         }
     } catch (error) {
-        logPokemonDetailsError(pokemonId, error);
+        handleEvolutionPokemonError(pokemonId, error);
         showEvolutionError("failed to load evolution pokemon. please try again.");
     }
 }
@@ -344,19 +255,9 @@ function updateStatsModal(pokemon) {
     }
     
     updateStatsModalPrimaryType(statsContent, pokemon);
+    updateStatsModalContent(statsContent, pokemon);
     
-    let modalData = prepareStatsModalContentData(pokemon);
-    statsContent.innerHTML = getStatsModalContentHTML(
-        pokemon, 
-        modalData.sprites, 
-        modalData.typeBadgesHTML, 
-        modalData.abilityString, 
-        modalData.pokemonHeight, 
-        modalData.pokemonWeight, 
-        modalData.evolutionChain
-    );
-    
-    logRenderSuccess("updated stats modal for " + pokemon.name);
+    logStatsModalUpdate(pokemon.name);
 }
 
 //--------------------------------------------------------------------------------------> show loading in evolution area
@@ -364,7 +265,7 @@ function showEvolutionLoading() {
     let evolutionContainer = findEvolutionContainer();
     if (evolutionContainer) {
         evolutionContainer.innerHTML = getEvolutionLoadingHTML();
-        logLoadingShow("evolution pokemon loading");
+        logEvolutionLoadingShow();
     }
 }
 
@@ -373,6 +274,6 @@ function showEvolutionError(message) {
     let evolutionContainer = findEvolutionContainer();
     if (evolutionContainer) {
         evolutionContainer.innerHTML = getEvolutionErrorHTML();
-        logErrorMessage("evolution loading error: " + message);
+        logEvolutionErrorShow(message);
     }
 }

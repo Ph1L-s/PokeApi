@@ -11,14 +11,24 @@ function extractIdFromUrl(url) {
     return pokemonId;
 }
 
+function handleFetchError(response) {
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response;
+}
+
+async function fetchPokemonData(pokemonId) {
+    let response = await fetch(POKEAPI_URL + `pokemon/${pokemonId}`);
+    handleFetchError(response);
+    let pokemon = await response.json();
+    return pokemon;
+}
+
 async function getPokemon(pokemonId) {
     try{
         logApiCall("pokemon/" + pokemonId);
-        let response = await fetch(POKEAPI_URL + `pokemon/${pokemonId}`);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        let pokemon = await response.json();
+        let pokemon = await fetchPokemonData(pokemonId);
         logApiSuccess("pokemon/" + pokemonId, null);
         return pokemon;
     } catch (error) {
@@ -27,15 +37,18 @@ async function getPokemon(pokemonId) {
     }
 }
 
+async function fetchPokemonListData(limit, offset) {
+    let endpoint = `pokemon?limit=${limit}&offset=${offset}`;
+    let response = await fetch(POKEAPI_URL + endpoint);
+    handleFetchError(response);
+    let listData = await response.json();
+    return { listData, endpoint };
+}
+
 async function getPokemonList(limit = 20, offset = 0) {
     try{
-        let endpoint = `pokemon?limit=${limit}&offset=${offset}`;
+        let { listData, endpoint } = await fetchPokemonListData(limit, offset);
         logApiCall(endpoint);
-        let response = await fetch(POKEAPI_URL + endpoint);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        let listData = await response.json();
         logApiSuccess(endpoint, listData.results.length);
         return listData;
     } catch (error){
@@ -44,28 +57,37 @@ async function getPokemonList(limit = 20, offset = 0) {
     }
 }
 
+async function createPokemonPromise(pokemonId, pokemonFetchIndex) {
+    try {
+        let pokemon = await getPokemon(pokemonId);
+        if (pokemon) {
+            return { pokemon, originalIndex: pokemonFetchIndex, id: pokemonId };
+        }
+        return null;
+    } catch (error) {
+        logErrorMessage("Failed to load pokemon " + pokemonId, error);
+        return null;
+    }
+}
+
+function processPokemonResults(results) {
+    let validPokemon = results
+        .filter(result => result !== null)
+        .sort(function(a, b) { return a.originalIndex - b.originalIndex; })
+        .map(result => result.pokemon);
+    return validPokemon;
+}
+
 async function getMultiplePokemon(pokemonIds) {
     try{
         logApiMessage("loading multiple pokemon: " + pokemonIds.length + " total");
         
         let pokemonPromises = pokemonIds.map(async (pokemonId, pokemonFetchIndex) => {
-            try {
-                let pokemon = await getPokemon(pokemonId);
-                if (pokemon) {
-                    return { pokemon, originalIndex: pokemonFetchIndex, id: pokemonId };
-                }
-                return null;
-            } catch (error) {
-                logErrorMessage("Failed to load pokemon " + pokemonId, error);
-                return null;
-            }
+            return await createPokemonPromise(pokemonId, pokemonFetchIndex);
         });
         
         let results = await Promise.all(pokemonPromises);
-        let validPokemon = results
-            .filter(result => result !== null)
-            .sort(function(a, b) { return a.originalIndex - b.originalIndex; })
-            .map(result => result.pokemon);
+        let validPokemon = processPokemonResults(results);
 
         logApiSuccess("multiple pokemon", validPokemon.length);
         return validPokemon;
@@ -87,14 +109,17 @@ function getPokemonSprites(pokemonId) {
     };
 }
 
+async function fetchPokemonTypesData() {
+    let response = await fetch(POKEAPI_URL + "type");
+    handleFetchError(response);
+    let typesData = await response.json();
+    return typesData;
+}
+
 async function getPokemonTypes() {
     try {
         logApiCall("types");
-        let response = await fetch(POKEAPI_URL + "type");
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        let typesData = await response.json();
+        let typesData = await fetchPokemonTypesData();
         logApiSuccess("types", typesData.results.length);
         return typesData.results;
     } catch(error) {
